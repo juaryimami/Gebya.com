@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProductDescriptionFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/tv_product_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="#000000"
+        android:text="Software has become significant to development
+in  nearly  all  areas  of  human  being  life.  The
+ability of programming only is no longer enough
+to  create  huge  programs.  There  are  serious
+troubles in the cost, timeliness, maintenance and
+quality  of  many  software  products.  Software
+engineering  has  the  purpose  of  solving  these
+troubles by producing good quality, maintainable
+software, on time, with budget. Requirements are
+attributes or  something, which determine before
+develop products. It is a situation or means that
+have  to  be  met  or  possessed  by  a  system  or
+system  part  to  assure  a  contract,  standard,
+condition, or other officially imposed documents.
+A  well-formed  requirement  is  a  declaration  of
+system functionality that satisfies client needs.
+" />
+</FrameLayout>

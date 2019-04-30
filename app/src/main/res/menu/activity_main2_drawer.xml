@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_my_mall"
+            android:icon="@drawable/my_gebya"
+            android:title="My Gebya" />
+
+        <item
+            android:id="@+id/nav_my_orders"
+            android:icon="@drawable/my_orders"
+            android:title="My Orders" />
+        <item
+            android:id="@+id/nav_my_reward"
+            android:icon="@drawable/my_reward"
+            android:title="My Rewards" />
+        <item
+            android:id="@+id/nav_my_cart"
+            android:icon="@drawable/my_cart"
+            android:title="My Cart" />
+        <item
+            android:id="@+id/nav_my_wishlist"
+            android:icon="@drawable/my_wishlist"
+            android:title="My Wishlist" />
+        <item
+            android:id="@+id/nav_my_account"
+            android:icon="@drawable/profile"
+            android:title="My Account" />
+    </group>
+    <item
+        android:id="@+id/nav_sign_out"
+        android:icon="@drawable/power"
+        android:title="Sign out" />
+
+
+
+
+</menu>

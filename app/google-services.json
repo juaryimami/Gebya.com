@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "127087636937",
+    "firebase_url": "https://vertualgebya.firebaseio.com",
+    "project_id": "vertualgebya",
+    "storage_bucket": "vertualgebya.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127087636937:android:da3c4dfb43808230",
+        "android_client_info": {
+          "package_name": "com.example.jewharyimer.gebya"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC87eCUrmHcfV6eoCL_h4CQDo4ZKUwAvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127087636937-ci40m24bami4ln8pptli8onhb0fukbkm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

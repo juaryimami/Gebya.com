@@ -1,0 +1,71 @@
+package com.example.jewharyimer.gebya;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class DeliveryActivity extends AppCompatActivity {
+
+    private RecyclerView deliveryRecyclerView;
+    private Button ChangeORaddNewAddress;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_delivery);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setTitle("Delivery");
+
+
+        deliveryRecyclerView=findViewById(R.id.delivery_recycler_view);
+        ChangeORaddNewAddress=findViewById(R.id.change_add_address_btn);
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        deliveryRecyclerView.setLayoutManager(linearLayoutManager);
+        List<CartItemModel> cartItemModelList=new ArrayList<>();
+
+        cartItemModelList.add(new CartItemModel(0,R.drawable.im3,"Raya kemis new"
+                ,2,"Br. 49999/-","Br. 49999/-"
+                ,1,0,1));
+        cartItemModelList.add(new CartItemModel(0,R.drawable.im3,"Raya kemis new"
+                ,0,"Br. 49999/-","Br. 49999/-"
+                ,1,1,1));
+        cartItemModelList.add(new CartItemModel(0,R.drawable.im3,"Raya kemis new"
+                ,2,"Br. 49999/-","Br. 49999/-"
+                ,1,2,1));
+
+
+        cartItemModelList.add(new CartItemModel(1,"Price (3 items)","Br. 499999","Free","Br. 1699999","Br.4999999"));
+
+        CartAdapter cartAdapter=new CartAdapter(cartItemModelList);
+        cartAdapter.notifyDataSetChanged();
+        ChangeORaddNewAddress.setVisibility(View.VISIBLE);
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+       if(id==android.R.id.home){
+           finish();
+           return true;
+       }
+        return super.onOptionsItemSelected(item);
+    }
+
+}
