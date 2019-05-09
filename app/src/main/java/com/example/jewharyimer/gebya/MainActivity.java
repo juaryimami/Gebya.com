@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity
 
     private static final int HOME_FRAGMENT=0;
     private static final int CART_FRAGMENT=1;
-
     private static final int ORDERS_FRAGMENT=2;
     private static final int WISHLIST_FRAGMENT=3;
     private static final int REWARD_FRAGMENT=4;

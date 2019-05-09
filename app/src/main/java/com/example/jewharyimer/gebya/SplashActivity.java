@@ -16,7 +16,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SystemClock.sleep(3000);
+        SystemClock.sleep(5000);
 
         auth=FirebaseAuth.getInstance();
 
