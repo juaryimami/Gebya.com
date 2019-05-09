@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
 
 public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.ViewHolder> {
@@ -31,6 +34,7 @@ public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.View
      String icon=category_modelList.get(position).getCategoryIconLink();
      String name=category_modelList.get(position).getCategoryName();
      viewHolder.setCategory(name,position  );
+     viewHolder.setCatagoryIconlink(icon);
     }
 
     @Override
@@ -49,7 +53,11 @@ public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.View
             catagoryIconlink=itemView.findViewById(R.id.category_icon1_view);
             categoryName=itemView.findViewById(R.id.category_name);
         }
-        private void setCatagoryIconlink(){}
+        private void setCatagoryIconlink(String iconUrl){
+            if(iconUrl.equals("null")) {
+                Glide.with(itemView.getContext()).load(iconUrl).apply(new RequestOptions().placeholder(R.drawable.home)).into(catagoryIconlink);
+            }
+        }
         private void setCategory(final String name,final int position){
             categoryName.setText(name);
             itemView.setOnClickListener(new View.OnClickListener() {

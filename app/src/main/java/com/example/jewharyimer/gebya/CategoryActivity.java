@@ -13,9 +13,14 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jewharyimer.gebya.DBqueries.lists;
+import static com.example.jewharyimer.gebya.DBqueries.loadFragmentData;
+import static com.example.jewharyimer.gebya.DBqueries.loadedCategoriesName;
+
 public class CategoryActivity extends AppCompatActivity {
 
     private RecyclerView categoryRecyclerView;
+    private HomePageAdapter homePageAdapter;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -30,53 +35,6 @@ public class CategoryActivity extends AppCompatActivity {
 
         categoryRecyclerView=findViewById(R.id.categoryRecycview);
 
-        /*List<Category_Model> category_modelList=new ArrayList<Category_Model>();
-        category_modelList.add(new Category_Model("link","Home"));
-        category_modelList.add(new Category_Model("link","Electronics"));
-        category_modelList.add(new Category_Model("link","Appliance"));
-        category_modelList.add(new Category_Model("link","Furniture"));
-        category_modelList.add(new Category_Model("link","Fashion"));
-        category_modelList.add(new Category_Model("link","Toys"));
-        category_modelList.add(new Category_Model("link","Sports"));
-        category_modelList.add(new Category_Model("link","Wall Arts"));
-        category_modelList.add(new Category_Model("link","Books"));
-        category_modelList.add(new Category_Model("link","Shoes"));
-
-        category_adapter =new Category_Adapter(category_modelList);
-        categoryRecyclerView.setAdapter(category_adapter);
-        category_adapter.notifyDataSetChanged();
-*/
-        //bannerSliderView=view.findViewById(R.id.Banner_slider_view_pager);
-        List<SliderModel>sliderModelList=new ArrayList<SliderModel>();
-        sliderModelList.add(new SliderModel(R.drawable.home,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.custom_error_icon,"#077AE4"));
-
-
-        sliderModelList.add(new SliderModel(R.drawable.email_black,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.red_email,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.ic_launcher_background,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.ic_launcher_foreground,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.my_cart,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.profile,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.home,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.custom_error_icon,"#077AE4"));
-
-        sliderModelList.add(new SliderModel(R.drawable.email_black,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.red_email,"#077AE4"));
-
-
-
-        List<HorizontalProductScrollModel> horizontalProductScrollModelList=new ArrayList<>();
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im1,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im2,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im3,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im4,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im5,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im6,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im6,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im6,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-
 
         ///////////////////////////////////
         //cattagoryRecyclerView=view.findViewById(R.id.testing_recyclerView);
@@ -85,20 +43,23 @@ public class CategoryActivity extends AppCompatActivity {
         categoryRecyclerView.setLayoutManager(testingLineatLayout);
         ////////////////////////////////////
 
-        List<HomePageModel> homePageModelList=new ArrayList<>();
-        homePageModelList.add(new HomePageModel(0,sliderModelList));
-        homePageModelList.add(new HomePageModel(1,R.drawable.im4,"#000000"));
-        homePageModelList.add(new HomePageModel(2,"Deals of the Day",horizontalProductScrollModelList));
-        homePageModelList.add(new HomePageModel(3,"Deals of the Day",horizontalProductScrollModelList));
-        homePageModelList.add(new HomePageModel(1,R.drawable.im4,"#ff0000"));
-        homePageModelList.add(new HomePageModel(3,"Deals of the Day",horizontalProductScrollModelList));
-        homePageModelList.add(new HomePageModel(2,"Deals of the Day",horizontalProductScrollModelList));
-        //homePageModelList.add(new HomePageModel(0,sliderModelList));
-        homePageModelList.add(new HomePageModel(1,R.drawable.im5,"#ffff00"));
-        homePageModelList.add(new HomePageModel(0,sliderModelList));
+        //List<HomePageModel> homePageModelList=new ArrayList<>();
+        int listPosition=0;
+        for(int x=0;x<loadedCategoriesName.size();x++){
+            if(loadedCategoriesName.get(x).equals(title.toUpperCase())){
+                listPosition=x;
+            }
+        }
+        if(listPosition==0){
+            loadedCategoriesName.add(title.toUpperCase());
+            lists.add(new ArrayList<HomePageModel>());
+            homePageAdapter=new HomePageAdapter(lists.get(loadedCategoriesName.size()-1));
+            loadFragmentData(homePageAdapter,this,0,title);
 
+        }else {
+            homePageAdapter=new HomePageAdapter(lists.get(listPosition));
+             }
 
-        HomePageAdapter homePageAdapter=new HomePageAdapter(homePageModelList);
         categoryRecyclerView.setAdapter(homePageAdapter);
         homePageAdapter.notifyDataSetChanged();
 

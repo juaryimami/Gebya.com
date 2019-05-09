@@ -35,14 +35,8 @@ public class WishlistFragment extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         wislistRecyclerView.setLayoutManager(linearLayoutManager);
         List<WishlistModel> wishlistModelList=new ArrayList<>();
-        wishlistModelList.add(new WishlistModel(R.drawable.im4,"Habesha kemis now",0,"3",145,"Br. 49999/-","Br. 59999 /-","cash on delivery"));
-        wishlistModelList.add(new WishlistModel(R.drawable.im4,"Habesha kemis now",1,"3",145,"Br. 49999/-","Br. 59999 /-","cash on delivery"));
-        wishlistModelList.add(new WishlistModel(R.drawable.im4,"Habesha kemis now",2,"3",145,"Br. 49999/-","Br. 59999 /-","cash on delivery"));
-        wishlistModelList.add(new WishlistModel(R.drawable.im4,"Habesha kemis now",3,"3",145,"Br. 49999/-","Br. 59999 /-","cash on delivery"));
-        wishlistModelList.add(new WishlistModel(R.drawable.im4,"Habesha kemis now",4,"3",145,"Br. 49999/-","Br. 59999 /-","cash on delivery"));
-        wishlistModelList.add(new WishlistModel(R.drawable.im4,"Habesha kemis now",5,"3",145,"Br. 49999/-","Br. 59999 /-","cash on delivery"));
 
-        WishlistAdapter wishlistAdapter=new WishlistAdapter(wishlistModelList);
+        WishlistAdapter wishlistAdapter=new WishlistAdapter(wishlistModelList,false);
         wislistRecyclerView.setAdapter(wishlistAdapter);
         wishlistAdapter.notifyDataSetChanged();
         return view;}

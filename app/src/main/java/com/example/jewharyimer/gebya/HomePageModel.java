@@ -10,8 +10,14 @@ public class HomePageModel {
     private int type;
     private List<SliderModel> sliderModelList;
 
-    public HomePageModel(int type, List<SliderModel> sliderModelList) {
+    private String backgroundcolor;
+    private  String title;
+
+
+    public HomePageModel(int type ,List<SliderModel> sliderModelList) {
+        //this.backgroundcolor=backgroundcolor;
         this.type = type;
+        //this.title=title;
         this.sliderModelList = sliderModelList;
     }
 
@@ -31,20 +37,19 @@ public class HomePageModel {
         this.sliderModelList = sliderModelList;
     }
     ///////// strip add
-    private  int resource;
-    private String backgroundcolor;
+    private  String resource;
 
-    public HomePageModel(int type, int resource, String backgroundcolor) {
+    public HomePageModel(int type, String resource, String backgroundcolor) {
         this.type = type;
         this.resource = resource;
         this.backgroundcolor = backgroundcolor;
     }
 
-    public int getResource() {
+    public String getResource() {
         return resource;
     }
 
-    public void setResource(int resource) {
+    public void setResource(String resource) {
         this.resource = resource;
     }
 
@@ -58,10 +63,28 @@ public class HomePageModel {
     ///////// strip add
 
     ////////// HORIZONTAL PRODUCT LAYOUT
-    private String title;
+    //private String title;
     private List<HorizontalProductScrollModel> horizontalProductScrollModelList;
+    private List<WishlistModel> viewProductlList;
 
-    public HomePageModel(int type, String title, List<HorizontalProductScrollModel> horizontalProductScrollModelList) {
+    public HomePageModel(int type,String backgroundcolor ,String title, List<HorizontalProductScrollModel> horizontalProductScrollModelList,List<WishlistModel> viewAllActivityModelList) {
+        this.viewProductlList=viewAllActivityModelList;
+        this.backgroundcolor=backgroundcolor;
+        this.type = type;
+        this.title = title;
+        this.horizontalProductScrollModelList = horizontalProductScrollModelList;
+    }
+
+    public List<WishlistModel> getViewProductlList() {
+        return viewProductlList;
+    }
+
+    public void setViewProductlList(List<WishlistModel> viewProductlList) {
+        this.viewProductlList = viewProductlList;
+    }
+
+    public HomePageModel(int type, String backgroundcolor , String title, List<HorizontalProductScrollModel> horizontalProductScrollModelList) {
+        this.backgroundcolor=backgroundcolor;
         this.type = type;
         this.title = title;
         this.horizontalProductScrollModelList = horizontalProductScrollModelList;

@@ -1,6 +1,11 @@
 package com.example.jewharyimer.gebya;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -15,10 +20,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+
+import static com.example.jewharyimer.gebya.RegisterActivity.setSignupFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -30,6 +41,9 @@ public class MainActivity extends AppCompatActivity
     private static final int WISHLIST_FRAGMENT=3;
     private static final int REWARD_FRAGMENT=4;
     private static final int ACCOUNT_FRAGMENT=5;
+    public static boolean showCart=false;
+
+
     private Window window;
 
     private FrameLayout frameLayout;
@@ -38,7 +52,7 @@ public class MainActivity extends AppCompatActivity
 
     private NavigationView navigationView;
 
-    private static int currentFragment=-1;
+    private int currentFragment=-1;
 
     private Toolbar toolbar;
     @Override
@@ -46,26 +60,35 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        ActionBarLogo=findViewById(R.id.action_bar_logo);
+        ActionBarLogo = findViewById(R.id.action_bar_logo);
 
-         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        window=getWindow();
+        window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true);
 
-        frameLayout=findViewById(R.id.main_frame1);
-        setFragment(new Home_Fragment(),HOME_FRAGMENT);
+        frameLayout = findViewById(R.id.main_frame1);
+        if (showCart) {
+            drawer.setDrawerLockMode(1);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            gotFragment("My Cart", new MyCartFragment(), -2);
+        } else {
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+
+            setFragment(new Home_Fragment(), HOME_FRAGMENT);
+        }
+
+
     }
 
     @Override
@@ -75,12 +98,18 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if(currentFragment==HOME_FRAGMENT){
+                currentFragment=-1;
             super.onBackPressed();
             }else {
+                if(showCart){
+                    showCart=false;
+                    finish();
+                }else {
                 ActionBarLogo.setVisibility(View.VISIBLE);
                 invalidateOptionsMenu();
                 setFragment(new Home_Fragment(),HOME_FRAGMENT);
                 navigationView.getMenu().getItem(0).setChecked(true);
+                }
             }
         }
     }
@@ -113,10 +142,42 @@ public class MainActivity extends AppCompatActivity
             return true;
 
         }else if(id==R.id.main_cart_icon){
-            // todo:notification
+            final Dialog signinDialogue=new Dialog(MainActivity.this);
+            signinDialogue.setContentView(R.layout.signin_dialigue);
+            signinDialogue.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+            signinDialogue.setCancelable(true);
+            Button dialogueSigninBtn=signinDialogue.findViewById(R.id.sign_in_btn);
+            Button dialogueSignupBtn=signinDialogue.findViewById(R.id.sign_up_btn);
+
+            final Intent regintent=new Intent(MainActivity.this,RegisterActivity.class);
+
+            dialogueSigninBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signinDialogue.dismiss();
+                setSignupFragment=false;
+                startActivity(regintent);
+                }
+            });
+
+            dialogueSignupBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signinDialogue.dismiss();
+                    setSignupFragment=true;
+                    startActivity(regintent);
+                }
+            });
+
+            signinDialogue.show();
+
             return true;
-        }else if(id==R.id.nav_sign_out){
+        }else if(id==android.R.id.home){
+            if(showCart){
+            showCart=false;
+            finish();
             return true;
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -148,6 +209,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_my_account) {
             gotFragment("My Account", new MyAccountFragment(),ACCOUNT_FRAGMENT);
 
+        }else if(id==R.id.nav_sign_out){
+            return true;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

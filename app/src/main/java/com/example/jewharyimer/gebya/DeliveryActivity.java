@@ -1,5 +1,6 @@
 package com.example.jewharyimer.gebya;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ public class DeliveryActivity extends AppCompatActivity {
 
     private RecyclerView deliveryRecyclerView;
     private Button ChangeORaddNewAddress;
+    public static final int SELECTED_ADDRESS=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,14 @@ public class DeliveryActivity extends AppCompatActivity {
         CartAdapter cartAdapter=new CartAdapter(cartItemModelList);
         cartAdapter.notifyDataSetChanged();
         ChangeORaddNewAddress.setVisibility(View.VISIBLE);
+        ChangeORaddNewAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myaddressintent=new Intent(DeliveryActivity.this,AddAddressActivity.class);
+                myaddressintent.putExtra("MODE",SELECTED_ADDRESS);
+                startActivity(myaddressintent);
+            }
+        });
 
     }
     @Override

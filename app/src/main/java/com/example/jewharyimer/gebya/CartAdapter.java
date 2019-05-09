@@ -1,10 +1,13 @@
 package com.example.jewharyimer.gebya;
 
+import android.app.Dialog;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -93,11 +96,11 @@ public class CartAdapter extends RecyclerView.Adapter {
         public CartItemViewHolder(@NonNull View itemView) {
             super(itemView);
             productImage=itemView.findViewById(R.id.product_image);
-            productTitle=itemView.findViewById(R.id.product_title);
+            productTitle=itemView.findViewById(R.id.tv_product_title);
             freeCoupensIcon=itemView.findViewById(R.id.free_coupen_icon);
             freeCoupens=itemView.findViewById(R.id.tv_free_coupen);
             productPrice=itemView.findViewById(R.id.product_price);
-            cuttedPrice=itemView.findViewById(R.id.cutted_price);
+            cuttedPrice=itemView.findViewById(R.id.tv_cutted_price);
             offersApplied=itemView.findViewById(R.id.offers_applied);
             coupensApplied=itemView.findViewById(R.id.coupens_id);
             productQuantity=itemView.findViewById(R.id.product_quantity);
@@ -128,6 +131,35 @@ public class CartAdapter extends RecyclerView.Adapter {
             }else {
                 offersApplied.setVisibility(View.INVISIBLE);
             }
+            productQuantity.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final Dialog indialog=new Dialog(itemView.getContext());
+                    indialog.setContentView(R.layout.qantuty_dalogue);
+                    indialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+                    indialog.setCancelable(false);
+                    final EditText quantityNo=indialog.findViewById(R.id.quantity_count);
+                    Button cancelBtn=indialog.findViewById(R.id.cancel_btn);
+                    Button OkBtn=indialog.findViewById(R.id.ok_btn);
+
+                    cancelBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            indialog.dismiss();
+                        }
+                    });
+
+                    OkBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            productQuantity.setText("Qty: " + quantityNo.getText());
+                            indialog.dismiss();
+
+                        }
+                    });
+                    indialog.show();
+                }
+            });
 
         }
     }

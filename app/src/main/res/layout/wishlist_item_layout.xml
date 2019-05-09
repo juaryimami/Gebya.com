@@ -21,14 +21,16 @@
         app:srcCompat="@drawable/im2" />
 
     <TextView
-        android:id="@+id/product_title"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_product_title"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="Habasha Kemis New"
-        android:textSize="16sp"
         android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/product_image"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,7 +41,7 @@
         android:layout_marginStart="8dp"
         android:tint="#8000FF"
         app:layout_constraintBottom_toBottomOf="@+id/free_coupen"
-        app:layout_constraintStart_toStartOf="@+id/product_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_product_title"
         app:layout_constraintTop_toTopOf="@+id/free_coupen"
         app:srcCompat="@drawable/coupen" />
 
@@ -52,7 +54,7 @@
         android:textSize="12sp"
         android:textColor="#8000ff"
         app:layout_constraintStart_toEndOf="@+id/coupen_icon"
-        app:layout_constraintTop_toBottomOf="@+id/product_title" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_product_title" />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -111,7 +113,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
     <TextView
-        android:id="@+id/cutted_price"
+        android:id="@+id/tv_cutted_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -150,8 +152,8 @@
         android:layout_height="1dp"
         android:layout_marginStart="8dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="@+id/cutted_price"
-        app:layout_constraintEnd_toEndOf="@+id/cutted_price"
-        app:layout_constraintStart_toStartOf="@+id/cutted_price"
-        app:layout_constraintTop_toTopOf="@+id/cutted_price" />
+        app:layout_constraintBottom_toBottomOf="@+id/tv_cutted_price"
+        app:layout_constraintEnd_toEndOf="@+id/tv_cutted_price"
+        app:layout_constraintStart_toStartOf="@+id/tv_cutted_price"
+        app:layout_constraintTop_toTopOf="@+id/tv_cutted_price" />
 </android.support.constraint.ConstraintLayout>

@@ -19,7 +19,7 @@
 
 
     <TextView
-        android:id="@+id/product_title"
+        android:id="@+id/tv_product_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -37,8 +37,8 @@
         android:layout_marginTop="8dp"
         android:tint="#8000ff"
         app:layout_constraintBottom_toBottomOf="@+id/tv_free_coupen"
-        app:layout_constraintStart_toStartOf="@+id/product_title"
-        app:layout_constraintTop_toBottomOf="@+id/product_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_product_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_product_title"
         app:srcCompat="@drawable/coupen" />
 
     <TextView
@@ -48,7 +48,7 @@
         android:text="free 2 coupens"
         android:textColor="#8000ff"
         app:layout_constraintStart_toEndOf="@+id/free_coupen_icon"
-        app:layout_constraintTop_toBottomOf="@+id/product_title" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_product_title" />
 
     <TextView
         android:id="@+id/product_price"
@@ -64,7 +64,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_free_coupen" />
 
     <TextView
-        android:id="@+id/cutted_price"
+        android:id="@+id/tv_cutted_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -78,10 +78,10 @@
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="@+id/cutted_price"
-        app:layout_constraintEnd_toEndOf="@+id/cutted_price"
-        app:layout_constraintStart_toStartOf="@+id/cutted_price"
-        app:layout_constraintTop_toTopOf="@+id/cutted_price" />
+        app:layout_constraintBottom_toBottomOf="@+id/tv_cutted_price"
+        app:layout_constraintEnd_toEndOf="@+id/tv_cutted_price"
+        app:layout_constraintStart_toStartOf="@+id/tv_cutted_price"
+        app:layout_constraintTop_toTopOf="@+id/tv_cutted_price" />
 
     <TextView
         android:id="@+id/offers_applied"

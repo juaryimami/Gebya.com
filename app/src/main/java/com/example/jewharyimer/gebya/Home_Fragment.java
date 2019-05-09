@@ -1,9 +1,13 @@
 package com.example.jewharyimer.gebya;
 
 
+import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -17,14 +21,29 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.jewharyimer.gebya.Category_Adapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.example.jewharyimer.gebya.DBqueries.category_modelList;
+import static com.example.jewharyimer.gebya.DBqueries.firebaseFirestore;
+import static com.example.jewharyimer.gebya.DBqueries.lists;
+import static com.example.jewharyimer.gebya.DBqueries.lists;
+import static com.example.jewharyimer.gebya.DBqueries.loadFragmentData;
+import static com.example.jewharyimer.gebya.DBqueries.loadcategories;
+import static com.example.jewharyimer.gebya.DBqueries.loadedCategoriesName;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,26 +52,10 @@ public class Home_Fragment extends Fragment {
 
     private RecyclerView categoryRecyclerView;
     private Category_Adapter category_adapter;
-    RecyclerView cattagoryRecyclerView;
+    RecyclerView homePageRecyclerView;
 
-    /*private ViewPager bannerSliderView;
-    private List<SliderModel> sliderModelList;
-
-    private int current_page=2;
-    private Timer timer;
-    final private long DELAY_TIME=3000;
-    final private long PERIOD_TIME=3000;
-    *//////// Add_strip
-    /*private ImageView stripImage;
-    private ConstraintLayout addStripContainer;
-    *//////// Add_strip
-
-    ////////////   horizontal product layout
-    /*private TextView horizontalLayoutTitle;
-    private Button horizontalLayoutButton;
-    private RecyclerView horizontalRecyclerView;*/
-    ////////////   horizontal product layout
-
+    private ImageView no_internate_connection;
+    private HomePageAdapter homePageAdapter;
 
     public Home_Fragment() {
         // Required empty public constructor
@@ -64,189 +67,57 @@ public class Home_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.fragment_home_, container, false);
-
-        categoryRecyclerView=view.findViewById(R.id.catagiry_recyclerview);
-
-        LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        categoryRecyclerView.setLayoutManager(layoutManager);
-
-        List<Category_Model> category_modelList=new ArrayList<Category_Model>();
-        category_modelList.add(new Category_Model("link","Home"));
-        category_modelList.add(new Category_Model("link","Electronics"));
-        category_modelList.add(new Category_Model("link","Appliance"));
-        category_modelList.add(new Category_Model("link","Furniture"));
-        category_modelList.add(new Category_Model("link","Fashion"));
-        category_modelList.add(new Category_Model("link","Toys"));
-        category_modelList.add(new Category_Model("link","Sports"));
-        category_modelList.add(new Category_Model("link","Wall Arts"));
-        category_modelList.add(new Category_Model("link","Books"));
-        category_modelList.add(new Category_Model("link","Shoes"));
-
-      category_adapter =new Category_Adapter(category_modelList);
-      categoryRecyclerView.setAdapter(category_adapter);
-      category_adapter.notifyDataSetChanged();
-
-      //bannerSliderView=view.findViewById(R.id.Banner_slider_view_pager);
-      List<SliderModel>sliderModelList=new ArrayList<SliderModel>();
-        sliderModelList.add(new SliderModel(R.drawable.home,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.custom_error_icon,"#077AE4"));
+        no_internate_connection=view.findViewById(R.id.no_internete_connection);
 
 
-        sliderModelList.add(new SliderModel(R.drawable.email_black,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.red_email,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.ic_launcher_background,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.ic_launcher_foreground,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.my_cart,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.profile,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.home,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.custom_error_icon,"#077AE4"));
+        ConnectivityManager connectivityManager=(ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if (networkInfo!=null && networkInfo.isConnected()==true) {
+            no_internate_connection.setVisibility(View.GONE);
 
-        sliderModelList.add(new SliderModel(R.drawable.email_black,"#077AE4"));
-        sliderModelList.add(new SliderModel(R.drawable.red_email,"#077AE4"));
+            categoryRecyclerView=view.findViewById(R.id.catagiry_recyclerview);
 
-
-       /* SliderAdapter sliderAdapter=new SliderAdapter(sliderModelList);
-      bannerSliderView.setAdapter(sliderAdapter);
-      bannerSliderView.setClipToPadding(false);
-      bannerSliderView.setPageMargin(20);
-
-      bannerSliderView.setCurrentItem(current_page);
-
-      ViewPager.OnPageChangeListener onPageChangeListener=new ViewPager.OnPageChangeListener() {
-          @Override
-          public void onPageScrolled(int i, float v, int i1) {
-
-          }
-
-          @Override
-          public void onPageSelected(int i) {
-           current_page=i;
-          }
-
-          @Override
-          public void onPageScrollStateChanged(int i) {
-           if(i==ViewPager.SCROLL_STATE_IDLE){
-               PageLooper();
-           }
-          }
-      };
-      bannerSliderView.addOnPageChangeListener(onPageChangeListener);
+            LinearLayoutManager layoutManager=new LinearLayoutManager(getActivity());
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            categoryRecyclerView.setLayoutManager(layoutManager);
 
 
-      startbannerSlideShow();
-      bannerSliderView.setOnTouchListener(new View.OnTouchListener() {
-          @Override
-          public boolean onTouch(View v, MotionEvent event) {
-              PageLooper();
-              stopbannerSlideShow();
-              if(event.getAction()==MotionEvent.ACTION_UP){
-                  startbannerSlideShow();
-              }
-              return false;
-          }
-      });
-*/
-         ////////////// Add Strip image
-        /*stripImage=view.findViewById(R.id.strip_ad_image);
-        addStripContainer=view.findViewById(R.id.strip_ad_container);
-        stripImage.setImageResource(R.drawable.im9);
-        addStripContainer.setBackgroundColor(Color.parseColor("#000000"));*/
-        ////////////// Add Strip image
-        ////////////   horizontal product layout
-       /* horizontalLayoutTitle=view.findViewById(R.id.horizontal_scroll_layout_title);
-        horizontalLayoutButton=view.findViewById(R.id.horizontal_scrol_button);
-        horizontalRecyclerView=view.findViewById(R.id.horizontal_scroll_recyclerview);
-       */ ////////////   horizontal product layout
+            category_adapter =new Category_Adapter(category_modelList);
+            categoryRecyclerView.setAdapter(category_adapter);
 
-        List<HorizontalProductScrollModel> horizontalProductScrollModelList=new ArrayList<>();
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im1,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im2,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im3,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im4,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im5,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im6,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im6,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-        horizontalProductScrollModelList.add(new HorizontalProductScrollModel(R.drawable.im6,"Raya Habesha Kemis", "New Fashion","Br.7999/-"));
-
-        /*HorizontalProductScrollAdapter horizontalProductScrollAdapter=new HorizontalProductScrollAdapter(horizontalProductScrollModelList);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        horizontalRecyclerView.setLayoutManager(linearLayoutManager);
-        horizontalRecyclerView.setAdapter(horizontalProductScrollAdapter);
-        horizontalProductScrollAdapter.notifyDataSetChanged();
-        *///////////////// horizontal product layout
-        /////////////     grid product layout
-
-        /*TextView GridlayoutTitle=view.findViewById(R.id.grid_product_layout_title);
-        TextView GridlayoutViewAllbutton=view.findViewById(R.id.grid_product_viewAll);
-        GridView gridView=view.findViewById(R.id.grid_product_grid);
-
-        gridView.setAdapter(new GridProductLayoutAdapter(horizontalProductScrollModelList));
-*/
-        ///////////////////////////////////
-        cattagoryRecyclerView=view.findViewById(R.id.testing_recyclerView);
-        LinearLayoutManager testingLineatLayout=new LinearLayoutManager(getContext());
-        testingLineatLayout.setOrientation(LinearLayoutManager.VERTICAL);
-        cattagoryRecyclerView.setLayoutManager(testingLineatLayout);
-        ////////////////////////////////////
-
-        List<HomePageModel> homePageModelList=new ArrayList<>();
-        homePageModelList.add(new HomePageModel(0,sliderModelList));
-        homePageModelList.add(new HomePageModel(1,R.drawable.im4,"#000000"));
-        homePageModelList.add(new HomePageModel(2,"Deals of the Day",horizontalProductScrollModelList));
-        homePageModelList.add(new HomePageModel(3,"Deals of the Day",horizontalProductScrollModelList));
-        homePageModelList.add(new HomePageModel(1,R.drawable.im4,"#ff0000"));
-        homePageModelList.add(new HomePageModel(3,"Deals of the Day",horizontalProductScrollModelList));
-        homePageModelList.add(new HomePageModel(2,"Deals of the Day",horizontalProductScrollModelList));
-        //homePageModelList.add(new HomePageModel(0,sliderModelList));
-        homePageModelList.add(new HomePageModel(1,R.drawable.im5,"#ffff00"));
-        homePageModelList.add(new HomePageModel(0,sliderModelList));
+            ///////////////////////////////////
+            homePageRecyclerView=view.findViewById(R.id.testing_recyclerView);
+            LinearLayoutManager testingLineatLayout=new LinearLayoutManager(getContext());
+            testingLineatLayout.setOrientation(LinearLayoutManager.VERTICAL);
+            homePageRecyclerView.setLayoutManager(testingLineatLayout);
 
 
-        HomePageAdapter homePageAdapter=new HomePageAdapter(homePageModelList);
-        cattagoryRecyclerView.setAdapter(homePageAdapter);
-        homePageAdapter.notifyDataSetChanged();
+            if(lists.size()==0){
+                loadedCategoriesName.add("HOME");
+                lists.add(new ArrayList<HomePageModel>());
+                homePageAdapter=new HomePageAdapter(lists.get(0));
+                loadFragmentData(homePageAdapter,getContext(),0,"HOME");
+            }else {
+                homePageAdapter=new HomePageAdapter(lists.get(0));
+                homePageAdapter.notifyDataSetChanged();
+            }
+            homePageRecyclerView.setAdapter(homePageAdapter);
+
+
+        }else {
+            Glide.with(this).load(R.drawable.no_connection).into(no_internate_connection);
+            no_internate_connection.setVisibility(View.VISIBLE);
+        }
+
+
+
+
 
         return view;
     }
-
-
-
-
-
-   /* private void PageLooper(){
-    if(current_page==sliderModelList.size()-2){
-       current_page=2;
-       bannerSliderView.setCurrentItem(current_page,false);
-        }
-        if(current_page==1){
-            current_page=sliderModelList.size()-3;
-            bannerSliderView.setCurrentItem(current_page,false);
-        }
-    }
-    private void startbannerSlideShow(){
-        final Handler handler=new Handler();
-        final Runnable update=new Runnable() {
-            @Override
-            public void run() {
-                if(current_page>=sliderModelList.size()){
-                    current_page=1;
-                }
-              bannerSliderView.setCurrentItem(current_page++,true);
-            }
-        };
-        timer=new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(update);
-            }
-        },DELAY_TIME,PERIOD_TIME);
-    }
-    private void stopbannerSlideShow(){
-        timer.cancel();
-    }
-*/
 }
+
+
+
+
+

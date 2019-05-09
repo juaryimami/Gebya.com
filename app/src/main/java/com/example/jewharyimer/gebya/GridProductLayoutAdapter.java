@@ -9,6 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
 
 public class GridProductLayoutAdapter extends BaseAdapter {
@@ -21,7 +24,8 @@ public class GridProductLayoutAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+
+        return horizontalProductScrollModelList.size();
     }
 
     @Override
@@ -55,10 +59,11 @@ public class GridProductLayoutAdapter extends BaseAdapter {
             TextView productTitle=view.findViewById(R.id.h_s_product_text);
             TextView productDiscription=view.findViewById(R.id.h_s_product_desctiption);
             TextView productprice=view.findViewById(R.id.h_s_product_price);
-            productimage.setImageResource(horizontalProductScrollModelList.get(position).getProductImage());
+            Glide.with(parent.getContext()).load(horizontalProductScrollModelList.get(position).getProductImage())
+            .apply(new RequestOptions().placeholder(R.drawable.home)).into(productimage);
             productDiscription.setText(horizontalProductScrollModelList.get(position).getProductDescription());
             productTitle.setText(horizontalProductScrollModelList.get(position).getProductTitle());
-            productprice.setText(horizontalProductScrollModelList.get(position).getProductPrice());
+            productprice.setText("Br. "+horizontalProductScrollModelList.get(position).getProductPrice()+"/-");
         }else {
           view=convertView;
         }

@@ -13,12 +13,15 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.jewharyimer.gebya.ProductDetailActivity.productSpecificationModelList;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ProductSpecificationFragment extends Fragment {
     private RecyclerView productSpecificationRecyclerView;
+
 
 
     public ProductSpecificationFragment() {
@@ -36,7 +39,8 @@ public class ProductSpecificationFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         productSpecificationRecyclerView.setLayoutManager(layoutManager);
 
-        List<ProductSpecificationModel> productSpecificationModelList=new ArrayList<>();
+        productSpecificationModelList=new ArrayList<>();
+       /*
         productSpecificationModelList.add(new ProductSpecificationModel(0,"General"));
         productSpecificationModelList.add(new ProductSpecificationModel(1,"RAM","4GB"));
         productSpecificationModelList.add(new ProductSpecificationModel(1,"RAM","4GB"));
@@ -63,7 +67,7 @@ public class ProductSpecificationFragment extends Fragment {
         productSpecificationModelList.add(new ProductSpecificationModel(1,"RAM","4GB"));
         productSpecificationModelList.add(new ProductSpecificationModel(1,"RAM","4GB"));
         productSpecificationModelList.add(new ProductSpecificationModel(1,"RAM","4GB"));
-
+*/
 
         ProductSpecificationAdapter productSpecificationAdapter=new ProductSpecificationAdapter(productSpecificationModelList);
         productSpecificationRecyclerView.setAdapter(productSpecificationAdapter);

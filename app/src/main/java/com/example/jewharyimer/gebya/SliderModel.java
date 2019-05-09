@@ -1,19 +1,19 @@
 package com.example.jewharyimer.gebya;
 
 public class SliderModel {
-    private int banner;
+    private String banner;
     private String backgroundcolor;
 
-    public SliderModel(int banner, String backgroundcolor) {
+    public SliderModel(String  banner, String backgroundcolor) {
         this.banner = banner;
         this.backgroundcolor = backgroundcolor;
     }
 
-    public int getBanner() {
+    public String getBanner() {
         return banner;
     }
 
-    public void setBanner(int banner) {
+    public void setBanner(String banner) {
         this.banner = banner;
     }
 

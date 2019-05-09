@@ -1,24 +1,35 @@
 package com.example.jewharyimer.gebya;
 
 public class HorizontalProductScrollModel {
-    private int ProductImage;
+
+    private String productID;
+    private String ProductImage;
     private String  ProductTitle;
     private String ProductDescription;
     private String ProductPrice;
 
 
-    public HorizontalProductScrollModel(int productImage, String productTitle, String productDescription, String productPrice) {
-        ProductImage = productImage;
-        ProductTitle = productTitle;
-        ProductDescription = productDescription;
-        ProductPrice = productPrice;
+    public HorizontalProductScrollModel(String productID,String productImage, String productTitle, String productDescription, String productPrice) {
+        this.productID=productID;
+        this.ProductImage = productImage;
+        this.ProductTitle = productTitle;
+        this.ProductDescription = productDescription;
+        this.ProductPrice = productPrice;
     }
 
-    public int getProductImage() {
+    public String getProductID() {
+        return productID;
+    }
+
+    public void setProductID(String productID) {
+        this.productID = productID;
+    }
+
+    public String getProductImage() {
         return ProductImage;
     }
 
-    public void setProductImage(int productImage) {
+    public void setProductImage(String productImage) {
         ProductImage = productImage;
     }
 
