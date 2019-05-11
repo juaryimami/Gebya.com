@@ -36,10 +36,8 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
            String description=horizontalProductScrollModels.get(i).getProductDescription();
            String price=horizontalProductScrollModels.get(i).getProductPrice();
 
-           viewHolder.setProductImage(resource);
-           viewHolder.setProductTitle(title);
-           viewHolder.setProductDescription(description);//ProductDescription(description);
-           viewHolder.setProductPrice(price);
+           viewHolder.setData(resource,title,description,price);
+
     }
 
     @Override
@@ -66,6 +64,17 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
             ProductDescription=itemView.findViewById(R.id.h_s_product_desctiption);
             ProductPrice=itemView.findViewById(R.id.h_s_product_price);
 
+
+        }
+
+        private void setData(String resource,String title,String description,String price){
+            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.place_holder)).into(ProductImage);
+            ProductPrice.setText("Br."+price+"/-");
+            ProductTitle.setText(title);
+            ProductDescription.setText(description);
+           // ProductImage.setImageResource(resource);
+
+            if(!title.equals("")){
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -74,23 +83,9 @@ public class HorizontalProductScrollAdapter extends RecyclerView.Adapter<Horizon
 
                 }
             });
+            }
         }
 
-        private void setProductImage(String resource){
-            Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.home)).into(ProductImage);
-
-           // ProductImage.setImageResource(resource);
-
-        }
-        private void setProductTitle(String title){
-            ProductTitle.setText(title);
-        }
-        private void setProductDescription(String description){
-            ProductDescription.setText(description);
-        }
-        private void setProductPrice(String price){
-            ProductPrice.setText("Br."+price+"/-");
-        }
 
     }
 }

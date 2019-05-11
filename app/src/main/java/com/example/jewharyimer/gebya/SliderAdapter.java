@@ -31,7 +31,7 @@ public class SliderAdapter extends PagerAdapter {
 
         ImageView banner=view.findViewById(R.id.banner_slider);
 
-        Glide.with(container.getContext()).load(sliderModelListp.get(position).toString()).apply(new RequestOptions().placeholder(R.drawable.home)).into(banner);
+        Glide.with(container.getContext()).load(sliderModelListp.get(position).toString()).apply(new RequestOptions().placeholder(R.drawable.place_holder)).into(banner);
         //banner.setImageResource(sliderModelListp.get(position).getBanner());
         container.addView(view,0);
         return view;

@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +19,7 @@ import java.util.List;
 public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.ViewHolder> {
 
     private List<Category_Model> category_modelList;
+    private int lasrPosition=-1;
 
     public Category_Adapter(List<Category_Model> category_modelList) {
         this.category_modelList = category_modelList;
@@ -35,6 +38,11 @@ public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.View
      String name=category_modelList.get(position).getCategoryName();
      viewHolder.setCategory(name,position  );
      viewHolder.setCatagoryIconlink(icon);
+        if(lasrPosition<position){
+            Animation animation=AnimationUtils.loadAnimation(viewHolder.itemView.getContext(),R.anim.fade_in);
+            viewHolder.itemView.setAnimation(animation);
+            lasrPosition=position;
+        }
     }
 
     @Override
@@ -55,11 +63,14 @@ public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.View
         }
         private void setCatagoryIconlink(String iconUrl){
             if(iconUrl.equals("null")) {
-                Glide.with(itemView.getContext()).load(iconUrl).apply(new RequestOptions().placeholder(R.drawable.home)).into(catagoryIconlink);
+                Glide.with(itemView.getContext()).load(iconUrl).apply(new RequestOptions().placeholder(R.drawable.place_holder)).into(catagoryIconlink);
+            }else {
+                catagoryIconlink.setImageResource(R.drawable.home);
             }
         }
         private void setCategory(final String name,final int position){
             categoryName.setText(name);
+            if(!name.equals("")){
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -70,7 +81,7 @@ public class Category_Adapter extends RecyclerView.Adapter<Category_Adapter.View
 
                     }
                     }
-            });
+            });}
         }
     }
 }
