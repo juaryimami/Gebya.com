@@ -54,6 +54,8 @@ public class SignupFragment extends Fragment {
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebasefirestore;
 
+    public static boolean disableCloseBtn=false;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,6 +74,11 @@ public class SignupFragment extends Fragment {
 
         firebaseAuth=FirebaseAuth.getInstance();
         firebasefirestore=FirebaseFirestore.getInstance();
+        if(disableCloseBtn){
+            closeButton.setVisibility(View.GONE);
+        }else {
+            closeButton.setVisibility(View.VISIBLE);
+        }
 
         parentFrameLayout=getActivity().findViewById(R.id.register_framlayout);
         return view;
@@ -169,8 +176,12 @@ public class SignupFragment extends Fragment {
     }
 
     private void mainIntent() {
-        Intent mainIntent=new Intent(getActivity(),MainActivity.class);
-         startActivity(mainIntent);
+        if(disableCloseBtn){
+            disableCloseBtn=false;
+        }else {
+            Intent mainIntent = new Intent(getActivity(), MainActivity.class);
+            startActivity(mainIntent);
+        }
          getActivity().finish();
     }
 
@@ -192,9 +203,7 @@ public class SignupFragment extends Fragment {
                                              @Override
                                              public void onComplete(@NonNull Task<DocumentReference> task) {
                                             if(task.isSuccessful()){
-                                                Intent mainIntent=new Intent(getActivity(),MainActivity.class);
-                                                startActivity(mainIntent);
-                                                getActivity().finish() ;
+                                                mainIntent();
                                             }else {
                                                 String msg=task.getException().getMessage();
                                                 progressBar.setVisibility(View.INVISIBLE);

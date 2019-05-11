@@ -46,7 +46,7 @@ public class SigninFragment extends Fragment {
 
      private FirebaseAuth auth;
      private ProgressBar prgbar;
-
+    public static boolean Disableclosebtn=false;
 
     public SigninFragment() {
 
@@ -69,6 +69,11 @@ public class SigninFragment extends Fragment {
                 auth=FirebaseAuth.getInstance();
                 forgotpassword=view.findViewById(R.id.signin_forgot);
 
+                if(Disableclosebtn){
+                    closebtn.setVisibility(View.GONE);
+                }else {
+                    closebtn.setVisibility(View.VISIBLE);
+                }
         return view;
     }
 
@@ -139,8 +144,13 @@ public class SigninFragment extends Fragment {
     }
 
     private void mainIntent() {
-        Intent mainintent=new Intent(getActivity(),MainActivity.class);
-        startActivity(mainintent);
+        if(Disableclosebtn)
+        {
+            Disableclosebtn=false;
+        }else {
+            Intent mainintent = new Intent(getActivity(), MainActivity.class);
+            startActivity(mainintent);
+        }
         getActivity().finish();
     }
 
