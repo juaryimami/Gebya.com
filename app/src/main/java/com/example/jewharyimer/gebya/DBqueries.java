@@ -2,6 +2,8 @@ package com.example.jewharyimer.gebya;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,7 +22,7 @@ public class DBqueries {
     public static List<List<HomePageModel>> lists=new ArrayList<>();
     public static List<String> loadedCategoriesName=new ArrayList<>();
 
-    public static void loadcategories(final Category_Adapter category_adapter, final Context context){
+    public static void loadcategories(final RecyclerView categoryRecyclerview,  final Context context){
         firebaseFirestore.collection("CATEGORIES").orderBy("index").get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -29,6 +31,8 @@ public class DBqueries {
                             for (QueryDocumentSnapshot documentSnapshots : task.getResult()){
                                 category_modelList.add(new Category_Model(documentSnapshots.get("index").toString(),documentSnapshots.get("categoryName").toString()));
                             }
+                            Category_Adapter category_adapter=new Category_Adapter(category_modelList);
+                            categoryRecyclerview.setAdapter(category_adapter );
                             category_adapter.notifyDataSetChanged();
                         }else {
                             String error=task.getException().getMessage();
@@ -38,7 +42,7 @@ public class DBqueries {
                 });
 
     }
-    public static void loadFragmentData(final HomePageAdapter adapter, final Context context,final int index,String Categoryname){
+    public static void loadFragmentData(final RecyclerView homePageREcyclerView, final Context context, final int index, String Categoryname){
         firebaseFirestore.collection("CATEGORIES")
                 .document(Categoryname.toUpperCase())
                 .collection("TOP_DEALS").orderBy("index")
@@ -114,7 +118,10 @@ public class DBqueries {
                                 ,GridlayoutlModelList));
 
                     }
-                    adapter.notifyDataSetChanged();
+                    HomePageAdapter homePageAdapter=new HomePageAdapter(lists.get(index));
+                    homePageREcyclerView.setAdapter(homePageAdapter);
+                    homePageAdapter.notifyDataSetChanged();
+                    Home_Fragment.swipeRefreshLayout.setRefreshing(false);
                 }else {
                     String error=task.getException().getMessage();
                     Toast.makeText(context,error,Toast.LENGTH_SHORT).show();

@@ -53,7 +53,6 @@ public class ProductDetailActivity extends AppCompatActivity {
     //////////// rewared
     private TextView rewardTitle;
     private TextView rewardBody;
-    public static List<ProductSpecificationModel> productSpecificationModelList=new ArrayList<>();
     //////////// rewared
 
     ////
@@ -72,6 +71,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     //////// rating layout
 
     private LinearLayout rateNowContainer;
+    private TextView avegeRating;
     //////// rating layout
     private ConstraintLayout productDetailsOnlyContainer;
     private ConstraintLayout productDetailtabsContainer;
@@ -83,9 +83,11 @@ public class ProductDetailActivity extends AppCompatActivity {
     private static Boolean addedToWishList=false;
     private FloatingActionButton addToWishlistBtn;
     private FirebaseFirestore firebaseFirestore;
-    public static String productDescription;
-    public static String productOtherDetails;
-    public static int tabPosition=-1;
+
+    private List<ProductSpecificationModel> productSpecificationModelList=new ArrayList<>();
+    private String productDescription;
+    private String productOtherDetails;
+    private int tabPosition=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         rateNowContainer=findViewById(R.id.rate_now_container);
         totalRatingsFiguer=findViewById(R.id.total_rattings_figure);
         rattingProgressBarContainer=findViewById(R.id.ratings_progressbar_container);
+        avegeRating=findViewById(R.id.avearage_ratings);
 
         firebaseFirestore=FirebaseFirestore.getInstance();
 
@@ -162,10 +165,10 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                             productSpecificationModelList.add(new ProductSpecificationModel(0
                             ,documentSnapshot.get("spec_title_"+x).toString()));
-                            for(long y=0;y<(long)documentSnapshot.get("spec_title_4_total_fields")+1;y++){
+                            for(long y=0;y<(long)documentSnapshot.get("spec_title_"+x+"_total_fields")+1;y++){
                                 productSpecificationModelList.add(new ProductSpecificationModel(1
-                                        ,documentSnapshot.get("spec_title_"+1+"_field_"+1+"_name").toString()
-                                ,documentSnapshot.get("spec_title_"+1+"_field_"+1+"_value").toString()));
+                                        ,documentSnapshot.get("spec_title_"+x+"_field_"+y+"_name").toString()
+                                ,documentSnapshot.get("spec_title_"+x+"_field_"+y+"_value").toString()));
 
                             }
 //66203648
@@ -178,9 +181,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                     }
                     totalRating.setText((long)documentSnapshot.get("total_ratings")+"ratings");
 
-                    for(int x=1;x<6;x++){
+                    for(int x=0;x<5;x++){
                         TextView rating= (TextView) rateNowContainer.getChildAt(x);
-                        rating.setText(String.valueOf((long)documentSnapshot.get((6-x)+"_star")));
+                        rating.setText(String.valueOf((long)documentSnapshot.get((5-x)+"_star")));
 
                         ProgressBar progressBar= (ProgressBar) rattingProgressBarContainer.getChildAt(x);
                         int max=Integer.parseInt(String.valueOf((long)documentSnapshot.get("total_ratings")));
@@ -189,6 +192,9 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                     }
                     totalRatingsFiguer.setText(String.valueOf((long)documentSnapshot.get("total_ratings")));
+                    avegeRating.setText(documentSnapshot.get("average_rating").toString());
+                    productDetailViewPaget.setAdapter(new ProductDetailsAdapter(getSupportFragmentManager()
+                            ,productDetailTablayout.getTabCount(),productDescription,productOtherDetails,productSpecificationModelList));
                 }else {
                     String error=task.getException().getMessage();
                     Toast.makeText(ProductDetailActivity.this,error,Toast.LENGTH_SHORT).show();
@@ -217,7 +223,6 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
-        productDetailViewPaget.setAdapter(new ProductDetailsAdapter(getSupportFragmentManager(),productDetailTablayout.getTabCount()));
         productDetailViewPaget.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(productDetailTablayout));
         productDetailTablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
