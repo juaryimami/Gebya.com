@@ -152,6 +152,7 @@ public class Home_Fragment extends Fragment {
 
         connectivityManager=(ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (networkInfo!=null && networkInfo.isConnected()==true) {
+            MainActivity.drawer.setDrawerLockMode(0);
             no_internate_connection.setVisibility(View.GONE);
             retryBtn.setVisibility(View.GONE);
             categoryRecyclerView.setVisibility(View.VISIBLE);
@@ -180,6 +181,7 @@ public class Home_Fragment extends Fragment {
             homePageRecyclerView.setAdapter(homePageAdapter);
 
         }else {
+            MainActivity.drawer.setDrawerLockMode(1);
             categoryRecyclerView.setVisibility(View.GONE);
             retryBtn.setVisibility(View.VISIBLE);
             homePageRecyclerView.setVisibility(View.GONE);
@@ -215,6 +217,7 @@ public class Home_Fragment extends Fragment {
         loadedCategoriesName.clear();
 
         if (networkInfo!=null && networkInfo.isConnected()==true) {
+            MainActivity.drawer.setDrawerLockMode(0);
             no_internate_connection.setVisibility(View.GONE);
             loadcategories(categoryRecyclerView,getContext());
             loadedCategoriesName.add("HOME");
@@ -222,6 +225,7 @@ public class Home_Fragment extends Fragment {
             loadFragmentData(homePageRecyclerView,getContext(),0,"HOME");
 
         }else {
+            MainActivity.drawer.setDrawerLockMode(1);
             Toast.makeText(getContext(),"no interner connection",Toast.LENGTH_SHORT).show();
             Glide.with(getContext()).load(R.drawable.no_connection).into(no_internate_connection);
             categoryRecyclerView.setVisibility(View.GONE);

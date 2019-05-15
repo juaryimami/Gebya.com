@@ -28,8 +28,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-import static com.example.jewharyimer.gebya.DBqueries.currentUser;
+//import static com.example.jewharyimer.gebya.DBqueries.currentUser;
 import static com.example.jewharyimer.gebya.RegisterActivity.setSignupFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -53,8 +55,11 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
 
     private int currentFragment=-1;
+    public static DrawerLayout drawer;
 
     private Toolbar toolbar;
+
+    private FirebaseUser currentUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,12 +93,6 @@ public class MainActivity extends AppCompatActivity
             setFragment(new Home_Fragment(), HOME_FRAGMENT);
         }
 
-         if(currentUser==null){
-            navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(false);
-         }else {
-             navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(true);
-         }
-
          signinDialogue=new Dialog(MainActivity.this);
         signinDialogue.setContentView(R.layout.signin_dialigue);
         signinDialogue.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -124,6 +123,19 @@ public class MainActivity extends AppCompatActivity
                 startActivity(regintent);
             }
         });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        currentUser=FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser==null){
+            navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(false);
+        }else {
+            navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(true);
+        }
+
 
     }
 
@@ -200,7 +212,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if(currentUser!=null) {
             int id = item.getItemId();
             if (id == R.id.nav_my_mall) {
@@ -225,7 +237,11 @@ public class MainActivity extends AppCompatActivity
                 gotFragment("My Account", new MyAccountFragment(), ACCOUNT_FRAGMENT);
 
             } else if (id == R.id.nav_sign_out) {
-               // return true;
+               FirebaseAuth.getInstance().signOut();
+               DBqueries.clearData();
+               Intent regintent=new Intent (MainActivity.this,RegisterActivity.class);
+               startActivity(regintent);
+               finish();
             }
             drawer.closeDrawer(GravityCompat.START);
             return true;

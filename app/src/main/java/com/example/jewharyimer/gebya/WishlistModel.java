@@ -1,6 +1,7 @@
 package com.example.jewharyimer.gebya;
 
 public class WishlistModel {
+    private String productID;
     private String productImage;
     private String productTitle;
     private long freeCoupen;

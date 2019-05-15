@@ -196,24 +196,41 @@ public class SignupFragment extends Fragment {
                               @Override
                               public void onComplete(@NonNull Task<AuthResult> task) {
                              if(task.isSuccessful()){
-                                 Map<Object,String> userdata=new HashMap <>();
+                                 Map<String,Object> userdata=new HashMap <>();
                                  userdata.put("fulname",fulname.getText().toString());
-                                 firebasefirestore.collection("USERS").add(userdata)
-                                         .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                 firebasefirestore.collection("USERS").document(firebaseAuth.getUid())
+                                         .set(userdata)
+                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                              @Override
-                                             public void onComplete(@NonNull Task<DocumentReference> task) {
-                                            if(task.isSuccessful()){
-                                                mainIntent();
-                                            }else {
-                                                String msg=task.getException().getMessage();
-                                                progressBar.setVisibility(View.INVISIBLE);
-                                                signupButton.setEnabled(false);
-                                                signupButton.setTextColor(Color.argb(50,255,255,255));
-                                                Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
-                                            }
+                                             public void onComplete(@NonNull Task<Void> task) {
+
+                                                 if(task.isSuccessful()){
+                                                     Map<String,Object> listsiz=new HashMap <>();
+                                                     listsiz.put("list_size", (long) 0);
+                                                     firebasefirestore.collection("USERS").document(firebaseAuth.getUid())
+                                                             .collection("USER_DATA").document("MY_WISHLIST")
+                                                             .set(listsiz).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                         @Override
+                                                         public void onComplete(@NonNull Task<Void> task) {
+                                                         if(task.isSuccessful()){
+                                                             mainIntent();
+                                                         }else {
+
+                                                             String msg=task.getException().getMessage();
+                                                             progressBar.setVisibility(View.INVISIBLE);
+                                                             signupButton.setEnabled(false);
+                                                             signupButton.setTextColor(Color.argb(50,255,255,255));
+                                                             Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
+                                                         }
+                                                         }
+                                                     });
+
+                                                 }else {
+                                                     String msg=task.getException().getMessage();
+                                                     Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
+                                                 }
                                              }
                                          });
-
                              }else {
                                  String msg=task.getException().getMessage();
                                  progressBar.setVisibility(View.INVISIBLE);

@@ -326,10 +326,12 @@ public class HomePageAdapter extends RecyclerView.Adapter {
 
             if(!title.equals("")){
             grid_produc_grid.getChildAt(i).setBackgroundColor(Color.parseColor("#ffffff"));
-            grid_produc_grid.getChildAt(i).setOnClickListener(new View.OnClickListener() {
+                final int finalI = i;
+                grid_produc_grid.getChildAt(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent productDetailIntent=new Intent(itemView.getContext(),ProductDetailActivity.class);
+                    productDetailIntent.putExtra("PRODUCT_ID",horizontalProductScrollModelList.get(finalI).getProductID());
                     itemView.getContext().startActivity(productDetailIntent);
                 }
             });
