@@ -44,6 +44,8 @@ import static com.example.jewharyimer.gebya.RegisterActivity.setSignupFragment;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
+    public static boolean running_wishlist_query=false;
+
     private ViewPager productImageViewPager;
     private TextView productTitle;
     private TextView totalRatingMiniView;
@@ -81,7 +83,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     //////// rating layout
 
     private LinearLayout coupenRedemptionLayout;
-    private LinearLayout rateNowContainer;
+    public static LinearLayout rateNowContainer;
     private TextView avegeRating;
     //////// rating layout
     private ConstraintLayout productDetailsOnlyContainer;
@@ -228,6 +230,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                         } else {
                             loadingDialogue.dismiss();
                         }
+                        if(DBqueries.myRating.size()==0){
+                            DBqueries.loadRatinglist(ProductDetailActivity.this);
+                        }
 
                     }else {
                         loadingDialogue.dismiss();
@@ -263,7 +268,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                 if(currentUser==null){
                     signinDialogue.show();
                 }else {
-                    addToWishlistBtn.setEnabled(false);
+                   // addToWishlistBtn.setEnabled(false);
+                   if(!running_wishlist_query){
+                       running_wishlist_query=true;
 
                 if(addedToWishList){
                     int index=DBqueries.wishhlist.indexOf(productID);
@@ -290,7 +297,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()){
                                             if(DBqueries.wishhlist.size()!=0){
-                                                DBqueries.wishlistModelList.add(new WishlistModel(documentSnapshot.get("product_image_1").toString()
+                                                DBqueries.wishlistModelList.add(new WishlistModel(productID,documentSnapshot.get("product_image_1").toString()
                                                         ,documentSnapshot.get("product_title").toString()
                                                         ,(long) documentSnapshot.get("free_coupens")
                                                         ,documentSnapshot.get("average_rating").toString()
@@ -310,18 +317,21 @@ public class ProductDetailActivity extends AppCompatActivity {
                                             String error=task.getException().getMessage();
                                             Toast.makeText(ProductDetailActivity.this,error,Toast.LENGTH_SHORT).show();
                                         }
-                                        addToWishlistBtn.setEnabled(true);
+                                      //  addToWishlistBtn.setEnabled(true);
+                                        running_wishlist_query=true;
                                     }
                                 });
 
                             }else{
-                                addToWishlistBtn.setEnabled(true);
+                          //      addToWishlistBtn.setEnabled(true);
+                                running_wishlist_query=true;
                                 String error=task.getException().getMessage();
                                 Toast.makeText(ProductDetailActivity.this,error,Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
              }
+                   }
              }
             }
         });
@@ -492,7 +502,9 @@ public class ProductDetailActivity extends AppCompatActivity {
             } else {
                 loadingDialogue.dismiss();
             }
-
+            if(DBqueries.myRating.size()==0){
+                DBqueries.loadRatinglist(ProductDetailActivity.this);
+            }
         }else {
             loadingDialogue.dismiss();
         }
@@ -515,7 +527,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             selectedCoupen.setVisibility(View.VISIBLE);
         }
     }
-   public void setRating(int starPosition){
+   public static void setRating(int starPosition){
         for(int x=0;x<rateNowContainer.getChildCount();x++){
             ImageView starButn=(ImageView)rateNowContainer.getChildAt(x);
             starButn.setImageTintList(ColorStateList.valueOf(Color.parseColor("#bebebe")));

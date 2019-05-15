@@ -37,6 +37,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull WishlistAdapter.ViewHolder viewHolder, int position) {
+        String productId=wishlistModelList.get(position).getProductID();
         String res=wishlistModelList.get(position).getProductImage();
         String title=wishlistModelList.get(position).getProductTitle();
         long coupeno=wishlistModelList.get(position).getFreeCoupen();
@@ -45,7 +46,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
         String productprices=wishlistModelList.get(position).getProductPrice();
         String cutedprices=wishlistModelList.get(position).getCuttedPrice();
         boolean paymentmt=wishlistModelList.get(position).isCOD();
-      viewHolder.setData(res,title,coupeno,ratting,totalratting,productprices,cutedprices,paymentmt,position);
+      viewHolder.setData(productId,res,title,coupeno,ratting,totalratting,productprices,cutedprices,paymentmt,position);
         if(lasrPosition<position){
             Animation animation=AnimationUtils.loadAnimation(viewHolder.itemView.getContext(),R.anim.fade_in);
             viewHolder.itemView.setAnimation(animation);
@@ -86,7 +87,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
             deleteBtn=itemView.findViewById(R.id.delete_btn);
 
         }
-        private void setData(String resource, String title, long freeCoupenNo, String averageRate
+        private void setData(final String productId, String resource, String title, long freeCoupenNo, String averageRate
                 , long totalratingNo, String price, String cuttedpriceValue, boolean payMethod, final int index){
 
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.place_holder)).into(productImage);
@@ -123,15 +124,16 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    deleteBtn.setEnabled(false);
-                    DBqueries.removeFromWishlist(index, itemView.getContext());
-                    //Toast.makeText(itemView.getContext(),"deleted",Toast.LENGTH_SHORT).show();
+                    if(ProductDetailActivity.running_wishlist_query){
+                    ProductDetailActivity.running_wishlist_query=true;
+                    DBqueries.removeFromWishlist(index, itemView.getContext());}
                 }
             });
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent ProductIntent=new Intent(itemView.getContext(),ProductDetailActivity.class);
+                    ProductIntent.putExtra("PRODUCT_ID",productId);
                     itemView.getContext().startActivity(ProductIntent);
                 }
             });

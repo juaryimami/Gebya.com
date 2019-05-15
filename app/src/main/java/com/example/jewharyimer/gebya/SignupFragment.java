@@ -29,10 +29,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -196,7 +199,10 @@ public class SignupFragment extends Fragment {
                               @Override
                               public void onComplete(@NonNull Task<AuthResult> task) {
                              if(task.isSuccessful()){
+
+
                                  Map<String,Object> userdata=new HashMap <>();
+
                                  userdata.put("fulname",fulname.getText().toString());
                                  firebasefirestore.collection("USERS").document(firebaseAuth.getUid())
                                          .set(userdata)
@@ -204,26 +210,47 @@ public class SignupFragment extends Fragment {
                                              @Override
                                              public void onComplete(@NonNull Task<Void> task) {
 
-                                                 if(task.isSuccessful()){
-                                                     Map<String,Object> listsiz=new HashMap <>();
-                                                     listsiz.put("list_size", (long) 0);
-                                                     firebasefirestore.collection("USERS").document(firebaseAuth.getUid())
-                                                             .collection("USER_DATA").document("MY_WISHLIST")
-                                                             .set(listsiz).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                         @Override
-                                                         public void onComplete(@NonNull Task<Void> task) {
-                                                         if(task.isSuccessful()){
-                                                             mainIntent();
-                                                         }else {
+                                                 if(task.isSuccessful())
+                                                 {
+                                                     CollectionReference userDataReference=firebasefirestore.collection("USERS").document(firebaseAuth.getUid())
+                                                             .collection("USER_DATA");
+                                                     //// maps
+                                                     Map<String,Object> wishlistmap=new HashMap <>();
+                                                     wishlistmap.put("list_size", (long) 0);
 
-                                                             String msg=task.getException().getMessage();
-                                                             progressBar.setVisibility(View.INVISIBLE);
-                                                             signupButton.setEnabled(false);
-                                                             signupButton.setTextColor(Color.argb(50,255,255,255));
-                                                             Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
-                                                         }
-                                                         }
-                                                     });
+                                                     Map<String,Object> rattingmap=new HashMap <>();
+                                                     rattingmap.put("list_size", (long) 0);
+                                                      ///// maps
+
+                                                     final List<String> documentNames=new ArrayList<>();
+                                                     documentNames.add("MY_WISHLIST");
+                                                     documentNames.add("MY_RATINGS");
+                                                     List<Map<String,Object>> documentFields=new ArrayList<>();
+                                                     documentFields.add(wishlistmap);
+                                                     documentFields.add(rattingmap);
+
+                                                      for (int x=0;x<documentNames.size();x++){
+                                                          final int finalX = x;
+                                                          userDataReference.document(documentNames.get(x))
+                                                                  .set(documentFields.get(x)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                              @Override
+                                                              public void onComplete(@NonNull Task<Void> task) {
+                                                                  if(task.isSuccessful()){
+                                                                      if(finalX ==documentNames.size()-1) {
+                                                                          mainIntent();
+                                                                      }
+                                                                  }else {
+
+                                                                      String msg=task.getException().getMessage();
+                                                                      progressBar.setVisibility(View.INVISIBLE);
+                                                                      signupButton.setEnabled(false);
+                                                                      signupButton.setTextColor(Color.argb(50,255,255,255));
+                                                                      Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
+                                                                  }
+                                                              }
+                                                          });
+                                                      }
+
 
                                                  }else {
                                                      String msg=task.getException().getMessage();
