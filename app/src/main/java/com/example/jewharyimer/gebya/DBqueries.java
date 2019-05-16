@@ -240,29 +240,36 @@ public class DBqueries {
         });
     }
     public static void loadRatinglist(final Context context){
-        myRatedIds.clear();
-        myRating.clear();
-        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA")
-                .document("MY_RATINGS").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-           if(task.isSuccessful()){
-              for(long x=0;x<(long)task.getResult().get("list_size");x++){
-              myRatedIds.add(task.getResult().get("product_ID_"+x).toString());
-              myRating.add((long)task.getResult().get("rating_"+x));
+        if(!ProductDetailActivity.running_rating_query) {
+            ProductDetailActivity.running_rating_query=true;
+            myRatedIds.clear();
+            myRating.clear();
+            firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA")
+                    .document("MY_RATINGS").get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (long x = 0; x < (long) task.getResult().get("list_size"); x++) {
+                            myRatedIds.add(task.getResult().get("product_ID_" + x).toString());
+                            myRating.add((long) task.getResult().get("rating_" + x));
 
-              if(task.getResult().get("product_ID_"+x).toString().equals(ProductDetailActivity.productID)
-                      && ProductDetailActivity.rateNowContainer!=null){
-                ProductDetailActivity.setRating(Integer.parseInt(String.valueOf((long)task.getResult().get("rating_"+x)))-1);
-              }
+                            if (task.getResult().get("product_ID_" + x).toString().equals(ProductDetailActivity.productID)
+                                    ) {
+                                ProductDetailActivity.initialRating = Integer.parseInt(String.valueOf((long) task.getResult().get("rating_" + x))) - 1;
+                                if(ProductDetailActivity.rateNowContainer != null){
+                                ProductDetailActivity.setRating(ProductDetailActivity.initialRating);
+                                }
+                            }
 
-              }
-           }else {
-            String msg=task.getException().getMessage();
-            Toast.makeText(context,msg,Toast.LENGTH_SHORT).show();
-           }
-            }
-        });
+                        }
+                    } else {
+                        String msg = task.getException().getMessage();
+                        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+                    }
+                    ProductDetailActivity.running_rating_query=false;
+                }
+            });
+        }
     }
 
     public static void clearData(){
