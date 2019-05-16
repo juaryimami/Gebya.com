@@ -1,6 +1,7 @@
 package com.example.jewharyimer.gebya;
 
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,9 @@ public class MyCartFragment extends Fragment {
     public MyCartFragment() {
         // Required empty public constructor
     }
+    private RecyclerView wislistRecyclerView;
+    private Dialog loadingDialogue;
+    public static CartAdapter cartAdapter;
 
 
     @Override
@@ -33,31 +37,38 @@ public class MyCartFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_my_cart, container, false);
+        ////////////// dialogue
+        loadingDialogue=new Dialog(getContext());
+        loadingDialogue.setContentView(R.layout.loading_progress_dialogue);
+        loadingDialogue.getWindow().setBackgroundDrawable(getActivity().getDrawable(R.drawable.slider_background));
+        loadingDialogue.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        loadingDialogue.setCancelable(false);
+        loadingDialogue.show();
+
+        ///////////// dialogue
+
+        if(DBqueries.cartlist.size()==0){
+            DBqueries.cartlist.clear();
+            DBqueries.loadCartList(getContext(),loadingDialogue,true);
+
+        }else{
+            loadingDialogue.dismiss();
+        }
+
         cartItemRecyclerView=view.findViewById(R.id.cart_item_recyclerView);
         continueButton=view.findViewById(R.id.cart_continue_btn);
 
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         cartItemRecyclerView.setLayoutManager(linearLayoutManager);
+
         List<CartItemModel> cartItemModelList=new ArrayList<>();
+        //cartItemModelList.add(new CartItemModel(0,R.drawable.im3,"Raya kemis new",2,"Br. 49999/-","Br. 49999/-",1,0,1));
 
-        cartItemModelList.add(new CartItemModel(0,R.drawable.im3,"Raya kemis new"
-                ,2,"Br. 49999/-","Br. 49999/-"
-                ,1,0,1));
-        cartItemModelList.add(new CartItemModel(0,R.drawable.im3,"Raya kemis new"
-                ,0,"Br. 49999/-","Br. 49999/-"
-                ,1,1,1));
-        cartItemModelList.add(new CartItemModel(0,R.drawable.im3,"Raya kemis new"
-                ,2,"Br. 49999/-","Br. 49999/-"
-                ,1,2,1));
+        CartAdapter cartAdapter=new CartAdapter(DBqueries.cartItemModelList);
+        cartAdapter.notifyDataSetChanged();
 
-
-        cartItemModelList.add(new CartItemModel(1,"Price (3 items)","Br. 499999","Free","Br. 1699999","Br.4999999"));
-
-                CartAdapter cartAdapter=new CartAdapter(cartItemModelList);
-                cartAdapter.notifyDataSetChanged();
-
-                continueButton.setOnClickListener(new View.OnClickListener() {
+        continueButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent=new Intent(getContext(),AddAddressActivity.class);

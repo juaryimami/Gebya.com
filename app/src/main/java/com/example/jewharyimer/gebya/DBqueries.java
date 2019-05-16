@@ -37,6 +37,9 @@ public class DBqueries {
     public static  List<String> myRatedIds=new ArrayList<>();
     public static List<Long> myRating=new ArrayList<>();
 
+    public static List<String> cartlist=new ArrayList<>();
+    public static List<CartItemModel> cartItemModelList=new ArrayList<>();
+
     public static void loadcategories(final RecyclerView categoryRecyclerview,  final Context context){
         category_modelList.clear();
         firebaseFirestore.collection("CATEGORIES").orderBy("index").get()
@@ -272,6 +275,63 @@ public class DBqueries {
         }
     }
 
+    public static void loadCartList(final Context context, final Dialog dialog, final boolean loadProductData){
+        cartlist.clear();
+        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
+                .collection("USER_DATA").document("MY_CART").get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(long x=0;x< (long)task.getResult().get("list_size");x++){
+                                cartlist.add(task.getResult().get("product_ID"+x).toString());
+
+                                if(DBqueries.cartlist.contains(ProductDetailActivity.productID)){
+                                    ProductDetailActivity.added_To_Cart=true;
+
+                                }else {
+                                    if(ProductDetailActivity.addToWishlistBtn!=null) {
+                                        ProductDetailActivity.addToWishlistBtn.setSupportImageTintList(ColorStateList.valueOf(Color.parseColor("#9e9e9e")));
+                                    }
+                                    ProductDetailActivity.addedToWishList=false;
+                                }
+
+                                if(loadProductData) {
+                                    cartItemModelList.clear();
+                                    final String productId=task.getResult().get("product_ID_"+x).toString();
+                                    firebaseFirestore.collection("PRODUCT").document(productId)
+                                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                                            if (task.isSuccessful()) {
+                                                cartItemModelList.add(new CartItemModel(CartItemModel.CART_ITEM,productId,task.getResult().get("product_image_1").toString()
+                                                        , (long)task.getResult().get("free_coupens")
+                                                        , task.getResult().get("product_price").toString()
+                                                        , task.getResult().get("cutted_price").toString()
+                                                        , 1
+                                                        , (long)0
+                                                        , (long) 0
+
+                                                ));
+                                                MyCartFragment.cartAdapter.notifyDataSetChanged();
+                                            } else {
+                                                String error = task.getException().getMessage();
+                                                Toast.makeText(context, error, Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+
+                        }else {
+                            String error=task.getException().getMessage();
+                            Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+    }
     public static void clearData(){
         category_modelList.clear();
         lists.clear();
