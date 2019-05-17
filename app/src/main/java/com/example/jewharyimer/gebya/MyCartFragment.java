@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class MyCartFragment extends Fragment {
     private RecyclerView wislistRecyclerView;
     private Dialog loadingDialogue;
     public static CartAdapter cartAdapter;
+    private TextView totalAmount;
 
 
     @Override
@@ -37,6 +39,7 @@ public class MyCartFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_my_cart, container, false);
+        totalAmount=view.findViewById(R.id.total_cart_amount);
         ////////////// dialogue
         loadingDialogue=new Dialog(getContext());
         loadingDialogue.setContentView(R.layout.loading_progress_dialogue);
@@ -49,7 +52,7 @@ public class MyCartFragment extends Fragment {
 
         if(DBqueries.cartlist.size()==0){
             DBqueries.cartlist.clear();
-            DBqueries.loadCartList(getContext(),loadingDialogue,true);
+            DBqueries.loadCartList(getContext(),loadingDialogue,true,new TextView(getContext()));
 
         }else{
             loadingDialogue.dismiss();
@@ -65,7 +68,7 @@ public class MyCartFragment extends Fragment {
         List<CartItemModel> cartItemModelList=new ArrayList<>();
         //cartItemModelList.add(new CartItemModel(0,R.drawable.im3,"Raya kemis new",2,"Br. 49999/-","Br. 49999/-",1,0,1));
 
-        CartAdapter cartAdapter=new CartAdapter(DBqueries.cartItemModelList);
+        CartAdapter cartAdapter=new CartAdapter(DBqueries.cartItemModelList,totalAmount);
         cartAdapter.notifyDataSetChanged();
 
         continueButton.setOnClickListener(new View.OnClickListener() {

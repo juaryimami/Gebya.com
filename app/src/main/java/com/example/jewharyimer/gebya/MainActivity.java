@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
 
     private FirebaseUser currentUser;
+    private TextView badge_count;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity
         }else {
             navigationView.getMenu().getItem(navigationView.getMenu().size()-1).setEnabled(true);
         }
-
+        invalidateOptionsMenu();
 
     }
 
@@ -168,6 +170,34 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setDisplayShowTitleEnabled(false);
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+            MenuItem cartItem=menu.findItem(R.id.main_cart_icon);
+            cartItem.setActionView(R.layout.badge_layout);
+            ImageView badge_icon=cartItem.getActionView().findViewById(R.id.badge_icon);
+            badge_icon.setImageResource(R.drawable.my_cart);
+             badge_count=cartItem.getActionView().findViewById(R.id.badge_count);
+
+             if(currentUser!=null){
+                 if (DBqueries.cartlist.size() == 0) {
+                     DBqueries.loadCartList(MainActivity.this, new Dialog(MainActivity.this),false,badge_count);
+                 } else {
+                         badge_count.setVisibility(View.VISIBLE);
+                     if(DBqueries.cartlist.size()<99){
+                         badge_count.setText(String.valueOf(DBqueries.cartlist.size()));
+                     }else {
+                         badge_count.setText("99");
+                     }}
+             }
+            cartItem.getActionView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(currentUser==null){
+                        signinDialogue.show();
+                    }else {
+                        gotFragment("MY CART", new MyCartFragment(), CART_FRAGMENT);
+                    }
+                }
+            });
+
         }
         return true;
     }

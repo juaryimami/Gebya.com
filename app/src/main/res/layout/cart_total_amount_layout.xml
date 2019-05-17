@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="#d6d6d6"
     android:layout_marginTop="4dp"
-    android:elevation="3dp">
+    >
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout"
