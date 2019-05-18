@@ -1,5 +1,6 @@
 package com.example.jewharyimer.gebya;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,6 +38,7 @@ public class MyAddressActivity extends AppCompatActivity {
 
     private LinearLayout addNewAddressBtn;
     private TextView addresSaved;
+    private Dialog loadingDialogue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,16 @@ public class MyAddressActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ////////////// dialogue
+        loadingDialogue=new Dialog(this);
+        loadingDialogue.setContentView(R.layout.loading_progress_dialogue);
+        loadingDialogue.getWindow().setBackgroundDrawable(getDrawable(R.drawable.slider_background));
+        loadingDialogue.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        loadingDialogue.setCancelable(false);
+
+        ///////////// dialogue
+
 
         priviousAddress=DBqueries.selectedAddress;
 
@@ -70,6 +83,8 @@ public class MyAddressActivity extends AppCompatActivity {
                 if(DBqueries.selectedAddress!=priviousAddress)
                 {
                     final int previousAddressIndex=priviousAddress;
+                    loadingDialogue.show();
+
                     Map<String,Object> updateSelection=new HashMap<>();
                     updateSelection.put("selected_"+String.valueOf(priviousAddress+1),false);
                     updateSelection.put("selected_"+String.valueOf(DBqueries.selectedAddress+1),true);
@@ -86,9 +101,12 @@ public class MyAddressActivity extends AppCompatActivity {
                              String error=task.getException().getMessage();
                              Toast.makeText(MyAddressActivity.this,error,Toast.LENGTH_SHORT).show();
                          }
+                         loadingDialogue.dismiss();
 
                         }
                     });
+                }else {
+                    finish();
                 }
             }
         });
@@ -106,8 +124,6 @@ public class MyAddressActivity extends AppCompatActivity {
                 startActivity(addAdressIntent);
             }
         });
-        addresSaved.setText(String.valueOf(DBqueries.addressModelList.size())+" saved Addresses");
-
     }
     public static void RefreshItem(int deselect,int select){
         addressAdapter.notifyItemChanged(deselect);
@@ -116,11 +132,32 @@ public class MyAddressActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(DBqueries.selectedAddress!=priviousAddress){
+            DBqueries.addressModelList.get(DBqueries.selectedAddress).setSelected(false);
+            DBqueries.addressModelList.get(priviousAddress).setSelected(true);
+            DBqueries.selectedAddress=priviousAddress;
+        }
         int id=item.getItemId();
         if(id==android.R.id.home){
             finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(DBqueries.selectedAddress!=priviousAddress){
+            DBqueries.addressModelList.get(DBqueries.selectedAddress).setSelected(false);
+            DBqueries.addressModelList.get(priviousAddress).setSelected(true);
+            DBqueries.selectedAddress=priviousAddress;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onStart() {
+        addresSaved.setText(String.valueOf(DBqueries.addressModelList.size())+" saved Addresses");
+        super.onStart();
     }
 }

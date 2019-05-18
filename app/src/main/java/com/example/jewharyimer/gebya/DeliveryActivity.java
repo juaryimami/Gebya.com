@@ -57,9 +57,6 @@ public class DeliveryActivity extends AppCompatActivity {
                 startActivity(myaddressintent);
             }
         });
-        fullname.setText(DBqueries.addressModelList.get(DBqueries.selectedAddress).getFullname());
-        fullAddress.setText(DBqueries.addressModelList.get(DBqueries.selectedAddress).getAddress());
-        pincode.setText(DBqueries.addressModelList.get(DBqueries.selectedAddress).getPincode());
 
     }
     @Override
@@ -77,4 +74,12 @@ public class DeliveryActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onStart() {
+        fullname.setText(DBqueries.addressModelList.get(DBqueries.selectedAddress).getFullname());
+        fullAddress.setText(DBqueries.addressModelList.get(DBqueries.selectedAddress).getAddress());
+        pincode.setText(DBqueries.addressModelList.get(DBqueries.selectedAddress).getPincode());
+
+        super.onStart();
+    }
 }

@@ -3,6 +3,7 @@ package com.example.jewharyimer.gebya;
 public class CartItemModel {
     public static final int CART_ITEM=0;
     public static final int TOTAL_AMOUNT=1;
+    private boolean in_Stock;
 
     private int TYPE;
 
@@ -16,11 +17,21 @@ public class CartItemModel {
     public void setTYPE(int TYPE) {
         this.TYPE = TYPE;
     }
+
+    public boolean isIn_Stock() {
+        return in_Stock;
+    }
+
+    public void setIn_Stock(boolean in_Stock) {
+        this.in_Stock = in_Stock;
+    }
     //////////// CART ITEM
 
-    public CartItemModel(int TYPE, String prouductImage, String productTitle, Long freeCoupens, String productPrice,
-                         String cuttedPrice, int productQuantity, Long offersApplied, Long coupensApplied) {
+    public CartItemModel(int TYPE,String productID ,String prouductImage, String productTitle, Long freeCoupens, String productPrice,
+                         String cuttedPrice, long productQuantity, Long offersApplied, Long coupensApplied,boolean in_Stock) {
         this.TYPE = TYPE;
+        this.productID=productID;
+        this.in_Stock=in_Stock;
         this.prouductImage = prouductImage;
         this.productTitle = productTitle;
         this.freeCoupens = freeCoupens;
@@ -75,7 +86,7 @@ public class CartItemModel {
         return productQuantity;
     }
 
-    public void setProductQuantity(int productQuantity) {
+    public void setProductQuantity(long productQuantity) {
         this.productQuantity = productQuantity;
     }
 

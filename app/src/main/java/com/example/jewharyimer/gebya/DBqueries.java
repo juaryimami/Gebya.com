@@ -317,12 +317,14 @@ public class DBqueries {
                                                     index=cartlist.size()-2;
                                                 }
                                                 cartItemModelList.add(index,new CartItemModel(CartItemModel.CART_ITEM,productId,task.getResult().get("product_image_1").toString()
+                                                        ,task.getResult().get("product_title").toString()
                                                         , (long)task.getResult().get("free_coupens")
                                                         , task.getResult().get("product_price").toString()
                                                         , task.getResult().get("cutted_price").toString()
-                                                        , 1
+                                                        ,(long)1
                                                         , (long)0
                                                         , (long) 0
+                                                        , (boolean)task.getResult().get("in_stock")
 
                                                 ));
                                                 if(cartlist.size()==0){
