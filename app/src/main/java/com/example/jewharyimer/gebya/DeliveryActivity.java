@@ -20,6 +20,9 @@ public class DeliveryActivity extends AppCompatActivity {
     private Button ChangeORaddNewAddress;
     public static final int SELECTED_ADDRESS=0;
     private TextView totalAmount;
+    private TextView fullname;
+    private TextView fullAddress;
+    private TextView pincode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +38,15 @@ public class DeliveryActivity extends AppCompatActivity {
         deliveryRecyclerView=findViewById(R.id.delivery_recycler_view);
         ChangeORaddNewAddress=findViewById(R.id.change_add_address_btn);
         totalAmount=findViewById(R.id.total_cart_amount);
+        fullname=findViewById(R.id.full_name);
+        fullAddress=findViewById(R.id.adderess);
+        pincode=findViewById(R.id.pincode);
 
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         deliveryRecyclerView.setLayoutManager(linearLayoutManager);
-        List<CartItemModel> cartItemModelList=new ArrayList<>();
-       // cartItemModelList.add(new CartItemModel(1,"Price (3 items)","Br. 499999","Free","Br. 1699999","Br.4999999"));
 
-        CartAdapter cartAdapter=new CartAdapter(cartItemModelList,totalAmount);
+        CartAdapter cartAdapter=new CartAdapter(DBqueries.cartItemModelList,totalAmount);
         cartAdapter.notifyDataSetChanged();
         ChangeORaddNewAddress.setVisibility(View.VISIBLE);
         ChangeORaddNewAddress.setOnClickListener(new View.OnClickListener() {
@@ -53,6 +57,9 @@ public class DeliveryActivity extends AppCompatActivity {
                 startActivity(myaddressintent);
             }
         });
+        fullname.setText(DBqueries.addressModelList.get(DBqueries.selectedAddress).getFullname());
+        fullAddress.setText(DBqueries.addressModelList.get(DBqueries.selectedAddress).getAddress());
+        pincode.setText(DBqueries.addressModelList.get(DBqueries.selectedAddress).getPincode());
 
     }
     @Override

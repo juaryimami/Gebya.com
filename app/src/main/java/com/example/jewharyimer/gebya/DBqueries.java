@@ -2,12 +2,14 @@ package com.example.jewharyimer.gebya;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +31,6 @@ import static android.os.Build.VERSION_CODES.M;
 
 public class DBqueries {
 
-
     public static FirebaseFirestore firebaseFirestore=FirebaseFirestore.getInstance();
     public static List<Category_Model> category_modelList=new ArrayList<Category_Model>();
     public static List<List<HomePageModel>> lists=new ArrayList<>();
@@ -41,6 +42,9 @@ public class DBqueries {
 
     public static List<String> cartlist=new ArrayList<>();
     public static List<CartItemModel> cartItemModelList=new ArrayList<>();
+
+    public static int selectedAddress=-1;
+    public static List<AddressModel> addressModelList=new ArrayList<>();
 
     public static void loadcategories(final RecyclerView categoryRecyclerview,  final Context context){
         category_modelList.clear();
@@ -388,4 +392,39 @@ public class DBqueries {
                 ProductDetailActivity.running_cart_query=false;
             }
         });}
+    public static void loadAddress(final Context context, final Dialog loadingDialog){
+
+        addressModelList.clear();
+        firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid()).collection("USER_DATA").document("MY_ADDRESSES")
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+           if(task.isSuccessful()){
+               Intent myaddressintent;
+               if((long)task.getResult().get("list_size")==0){
+                    myaddressintent=new Intent(context,AddAddressActivity.class);
+               }else {
+                   for(int x=1;x< (long)task.getResult().get("list_size")+1;x++){
+                       addressModelList.add(new AddressModel(task.getResult().get("fullname_"+x).toString(),
+                               task.getResult().get("address_"+x).toString(),
+                               task.getResult().get("pincode_"+x).toString(),
+                               (boolean)task.getResult().get("selected_"+x)));
+                       if((boolean)task.getResult().get("selected_"+x)){
+                           selectedAddress=x-1;
+                       }
+                   }
+                    myaddressintent=new Intent(context,DeliveryActivity.class);
+               }
+               context.startActivity(myaddressintent);
+
+
+           }else {
+               String error=task.getException().getMessage();
+               Toast.makeText(context,error,Toast.LENGTH_SHORT).show();
+           }
+           loadingDialog.dismiss();
+           }
+
+        });
+    }
 }

@@ -10,4 +10,11 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <string-array name="Ethiopian_city">
+        <item>Dessie Amhara</item>
+        <item>Bahit Dar and Gondar Amhara</item>
+        <item>Dessie Amhara</item>
+        <item>Dessie Amhara</item>
+        <item>Dessie Amhara</item>
+    </string-array>
 </resources>

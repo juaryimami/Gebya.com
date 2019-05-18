@@ -223,17 +223,22 @@ public class SignupFragment extends Fragment {
 
                                                      Map<String,Object> cartgmap=new HashMap <>();
                                                      cartgmap.put("list_size", (long) 0);
+
+                                                     Map<String,Object> myAddressgmap=new HashMap <>();
+                                                     myAddressgmap.put("list_size", (long) 0);
                                                       ///// maps
 
                                                      final List<String> documentNames=new ArrayList<>();
                                                      documentNames.add("MY_WISHLIST");
                                                      documentNames.add("MY_RATINGS");
                                                      documentNames.add("MY_CART");
+                                                     documentNames.add("MY_ADDRESSES");
 
                                                      List<Map<String,Object>> documentFields=new ArrayList<>();
                                                      documentFields.add(wishlistmap);
                                                      documentFields.add(rattingmap);
                                                      documentFields.add(cartgmap);
+                                                     documentFields.add(myAddressgmap);
 
                                                       for (int x=0;x<documentNames.size();x++){
                                                           final int finalX = x;
