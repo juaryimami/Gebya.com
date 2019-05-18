@@ -400,9 +400,10 @@ public class DBqueries {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
            if(task.isSuccessful()){
-               Intent myaddressintent;
+               Intent deliveryIntent;
                if((long)task.getResult().get("list_size")==0){
-                    myaddressintent=new Intent(context,AddAddressActivity.class);
+                   deliveryIntent=new Intent(context,AddAddressActivity.class);
+                   deliveryIntent.putExtra("INTENT","deliveryIntent");
                }else {
                    for(int x=1;x< (long)task.getResult().get("list_size")+1;x++){
                        addressModelList.add(new AddressModel(task.getResult().get("fullname_"+x).toString(),
@@ -413,9 +414,9 @@ public class DBqueries {
                            selectedAddress=x-1;
                        }
                    }
-                    myaddressintent=new Intent(context,DeliveryActivity.class);
+                    deliveryIntent=new Intent(context,DeliveryActivity.class);
                }
-               context.startActivity(myaddressintent);
+               context.startActivity(deliveryIntent);
 
 
            }else {

@@ -46,7 +46,7 @@ public class DeliveryActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         deliveryRecyclerView.setLayoutManager(linearLayoutManager);
 
-        CartAdapter cartAdapter=new CartAdapter(DBqueries.cartItemModelList,totalAmount);
+        CartAdapter cartAdapter=new CartAdapter(DBqueries.cartItemModelList,totalAmount,false);
         cartAdapter.notifyDataSetChanged();
         ChangeORaddNewAddress.setVisibility(View.VISIBLE);
         ChangeORaddNewAddress.setOnClickListener(new View.OnClickListener() {

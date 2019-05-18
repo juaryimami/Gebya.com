@@ -68,7 +68,7 @@ public class MyCartFragment extends Fragment {
         List<CartItemModel> cartItemModelList=new ArrayList<>();
         //cartItemModelList.add(new CartItemModel(0,R.drawable.im3,"Raya kemis new",2,"Br. 49999/-","Br. 49999/-",1,0,1));
 
-        CartAdapter cartAdapter=new CartAdapter(DBqueries.cartItemModelList,totalAmount);
+        CartAdapter cartAdapter=new CartAdapter(DBqueries.cartItemModelList,totalAmount,true);
         cartAdapter.notifyDataSetChanged();
 
         continueButton.setOnClickListener(new View.OnClickListener() {
