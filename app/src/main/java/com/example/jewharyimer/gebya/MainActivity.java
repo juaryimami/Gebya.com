@@ -1,5 +1,6 @@
 package com.example.jewharyimer.gebya;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     private static final int REWARD_FRAGMENT=4;
     private static final int ACCOUNT_FRAGMENT=5;
     public static boolean showCart=false;
+    public static Activity mainActivity;
 
     private Dialog signinDialogue;
     private Window window;
@@ -89,6 +91,7 @@ public class MainActivity extends AppCompatActivity
 
         frameLayout = findViewById(R.id.main_frame1);
         if (showCart) {
+            mainActivity=this;
             drawer.setDrawerLockMode(1);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             gotFragment("My Cart", new MyCartFragment(), -2);
@@ -158,6 +161,7 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
             }else {
                 if(showCart){
+                    mainActivity=null;
                     showCart=false;
                     finish();
                 }else {
@@ -184,7 +188,7 @@ public class MainActivity extends AppCompatActivity
 
              if(currentUser!=null){
                  if (DBqueries.cartlist.size() == 0) {
-                     DBqueries.loadCartList(MainActivity.this, new Dialog(MainActivity.this),false,badge_count);
+                     DBqueries.loadCartList(MainActivity.this, new Dialog(MainActivity.this),false,badge_count,new TextView(MainActivity.this));
                  } else {
                          badge_count.setVisibility(View.VISIBLE);
                      if(DBqueries.cartlist.size()<99){
@@ -234,6 +238,7 @@ public class MainActivity extends AppCompatActivity
             return true;
         }else if(id==android.R.id.home){
             if(showCart){
+                mainActivity=null;
             showCart=false;
             finish();
             return true;
@@ -243,46 +248,57 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    MenuItem menuItem;
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
 
+         menuItem=item;
          drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+         drawer.closeDrawer(GravityCompat.START);
+
         if(currentUser!=null) {
-            int id = item.getItemId();
-            if (id == R.id.nav_my_mall) {
-                //getSupportActionBar().setDisplayShowTitleEnabled(false);
-                ActionBarLogo.setVisibility(View.VISIBLE);
-                invalidateOptionsMenu();
-                setFragment(new Home_Fragment(), HOME_FRAGMENT);
-            }
 
-            if (id == R.id.nav_my_orders) {
-                gotFragment("My Orders", new MyOrderFragment(), ORDERS_FRAGMENT);
-            } else if (id == R.id.nav_my_reward) {
-                gotFragment("My Reward", new MyRewardsFragment(), REWARD_FRAGMENT);
+            drawer.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+                @Override
+                public void onDrawerClosed(View drawerView) {
+                    super.onDrawerClosed(drawerView);
+                    int id = menuItem.getItemId();
+                    if (id == R.id.nav_my_mall) {
+                        //getSupportActionBar().setDisplayShowTitleEnabled(false);
+                        ActionBarLogo.setVisibility(View.VISIBLE);
+                        invalidateOptionsMenu();
+                        setFragment(new Home_Fragment(), HOME_FRAGMENT);
+                    }
 
-            } else if (id == R.id.nav_my_cart) {
-                gotFragment("My cart", new MyCartFragment(), CART_FRAGMENT);
+                    if (id == R.id.nav_my_orders) {
+                        gotFragment("My Orders", new MyOrderFragment(), ORDERS_FRAGMENT);
+                    } else if (id == R.id.nav_my_reward) {
+                        gotFragment("My Reward", new MyRewardsFragment(), REWARD_FRAGMENT);
 
-            } else if (id == R.id.nav_my_wishlist) {
-                gotFragment("My WishList", new WishlistFragment(), WISHLIST_FRAGMENT);
+                    } else if (id == R.id.nav_my_cart) {
+                        gotFragment("My cart", new MyCartFragment(), CART_FRAGMENT);
 
-            } else if (id == R.id.nav_my_account) {
-                gotFragment("My Account", new MyAccountFragment(), ACCOUNT_FRAGMENT);
+                    } else if (id == R.id.nav_my_wishlist) {
+                        gotFragment("My WishList", new WishlistFragment(), WISHLIST_FRAGMENT);
 
-            } else if (id == R.id.nav_sign_out) {
-               FirebaseAuth.getInstance().signOut();
-               DBqueries.clearData();
-               Intent regintent=new Intent (MainActivity.this,RegisterActivity.class);
-               startActivity(regintent);
-               finish();
-            }
-            drawer.closeDrawer(GravityCompat.START);
+                    } else if (id == R.id.nav_my_account) {
+                        gotFragment("My Account", new MyAccountFragment(), ACCOUNT_FRAGMENT);
+
+                    } else if (id == R.id.nav_sign_out) {
+                        FirebaseAuth.getInstance().signOut();
+                        DBqueries.clearData();
+                        Intent regintent=new Intent (MainActivity.this,RegisterActivity.class);
+                        startActivity(regintent);
+                        finish();
+                    }
+                }
+            });
+
+
             return true;
         }else{
-            drawer.closeDrawer(GravityCompat.START);
             signinDialogue.show();
             return false;
         }
@@ -295,7 +311,7 @@ public class MainActivity extends AppCompatActivity
         ActionBarLogo.setVisibility(View.GONE);
         invalidateOptionsMenu();
         setFragment(fragment,fragmentNo);
-        if(fragmentNo==CART_FRAGMENT){
+        if(fragmentNo==CART_FRAGMENT || showCart){
         navigationView.getMenu().getItem(3).setChecked(true);
         params.setScrollFlags(0);
         }else {

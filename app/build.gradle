@@ -3,6 +3,9 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
+        manifestPlaceholders = [
+                yenepayReturnScheme: "com.Gebya.yenepay"
+        ]
         applicationId "com.example.jewharyimer.gebya"
         minSdkVersion 21
         targetSdkVersion 28
@@ -55,5 +58,7 @@ dependencies {
     implementation 'com.android.support:gridlayout-v7:28.0.0'
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    implementation 'com.github.YenePay:yenepay.sdk.android:0.0.7'
+
 }
 apply plugin: 'com.google.gms.google-services'

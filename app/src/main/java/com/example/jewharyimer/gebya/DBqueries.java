@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -282,7 +283,7 @@ public class DBqueries {
         }
     }
 
-    public static void loadCartList(final Context context, final Dialog dialog, final boolean loadProductData, final TextView badgecount){
+    public static void loadCartList(final Context context, final Dialog dialog, final boolean loadProductData, final TextView badgecount,final TextView cartTotalAmount){
         cartlist.clear();
         firebaseFirestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
                 .collection("USER_DATA").document("MY_CART").get()
@@ -329,6 +330,8 @@ public class DBqueries {
                                                 ));
                                                 if(cartlist.size()==0){
                                                     cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
+                                                    LinearLayout parent=(LinearLayout) cartTotalAmount.getParent().getParent();
+                                                    parent.setVisibility(View.VISIBLE);
                                                 }
                                                 if(cartlist.size()==0){
                                                     cartItemModelList.clear();
@@ -362,7 +365,7 @@ public class DBqueries {
         cartlist.clear();
         cartItemModelList.clear();
     }
-    public static void removedFromCartfinal(final int index, final Context context){
+    public static void removedFromCartfinal(final int index, final Context context, final TextView cartTotalAmount){
         final String removedProductID=cartlist.get(index);
         cartlist.remove(index);
         Map<String,Object> updateCartList=new HashMap<>();
@@ -380,6 +383,8 @@ public class DBqueries {
                         MyCartFragment.cartAdapter.notifyDataSetChanged();
                     }
                     if(cartlist.size()==0){
+                        LinearLayout parent=(LinearLayout) cartTotalAmount.getParent().getParent();
+                        parent.setVisibility(View.GONE);
                         cartItemModelList.clear();
                     }
                     Toast.makeText(context,"removed successfully!",Toast.LENGTH_SHORT).show();

@@ -1,5 +1,6 @@
 package com.example.jewharyimer.gebya;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -47,6 +48,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     public static boolean running_wishlist_query=false;
     public static boolean running_rating_query=false;
     public static boolean running_cart_query=false;
+    public static Activity productDetailActivity;
 
 
     public static MenuItem cartItem;
@@ -238,7 +240,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                             DBqueries.loadRatinglist(ProductDetailActivity.this);
                         }
                         if (DBqueries.cartlist.size() == 0) {
-                            DBqueries.loadCartList(ProductDetailActivity.this, loadingDialogue,false,badge_count);
+                            DBqueries.loadCartList(ProductDetailActivity.this, loadingDialogue,false,badge_count,new TextView(ProductDetailActivity.this));
                         }
                         if (DBqueries.wishhlist.size() == 0) {
                             DBqueries.loadWishlist(ProductDetailActivity.this, loadingDialogue,false);
@@ -296,7 +298,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                     if(task.isSuccessful()){
                                                         if(task.isSuccessful()){
                                                             if(DBqueries.cartItemModelList.size()!=0){
-                                                                DBqueries.cartItemModelList.add(new CartItemModel(CartItemModel.CART_ITEM,productID,
+                                                                DBqueries.cartItemModelList.add(0,new CartItemModel(CartItemModel.CART_ITEM,productID,
                                                                         documentSnapshot.get("product_image_1").toString()
                                                                         ,documentSnapshot.get("product_title").toString()
                                                                         , (long)documentSnapshot.get("free_coupens")
@@ -581,8 +583,29 @@ public class ProductDetailActivity extends AppCompatActivity {
                 if(currentUser==null){
                     signinDialogue.show();
                 }else {
-                    Intent dvIntent = new Intent(ProductDetailActivity.this, DeliveryActivity.class);
-                    startActivity(dvIntent);
+                    loadingDialogue.show();
+                    productDetailActivity= com.example.jewharyimer.gebya.ProductDetailActivity.this;
+                    DeliveryActivity.cartItemModelList=new ArrayList<>();
+                    DeliveryActivity.cartItemModelList.add(new CartItemModel(CartItemModel.CART_ITEM,productID,
+                            documentSnapshot.get("product_image_1").toString()
+                            ,documentSnapshot.get("product_title").toString()
+                            , (long)documentSnapshot.get("free_coupens")
+                            , documentSnapshot.get("product_price").toString()
+                            , documentSnapshot.get("cutted_price").toString()
+                            , 1
+                            , (long)0
+                            , (long) 0
+                            ,(boolean)documentSnapshot.get("in_stock")));
+                    DeliveryActivity.cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
+
+
+                    if(DBqueries.addressModelList.size()==0){
+                        DBqueries.loadAddress(ProductDetailActivity.this,loadingDialogue);
+                    }else {
+                        loadingDialogue.dismiss();
+                        Intent dvIntent = new Intent(ProductDetailActivity.this, DeliveryActivity.class);
+                        startActivity(dvIntent);
+                    }
                 }
             }
         });
@@ -767,7 +790,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                 if(currentUser!=null){
                 if (DBqueries.cartlist.size() == 0) {
-                DBqueries.loadCartList(ProductDetailActivity.this, loadingDialogue,false,badge_count);
+                DBqueries.loadCartList(ProductDetailActivity.this, loadingDialogue,false,badge_count,new TextView(ProductDetailActivity.this));
                  }else {
                     badge_count.setVisibility(View.VISIBLE);
                     if(DBqueries.cartlist.size()<99){
@@ -804,6 +827,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if(id==android.R.id.home){
+            productDetailActivity=null;
             finish();
             return true;
         }else if (id == R.id.main_search_icon) {
@@ -828,4 +852,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        productDetailActivity=null;
+        super.onBackPressed();
+    }
 }

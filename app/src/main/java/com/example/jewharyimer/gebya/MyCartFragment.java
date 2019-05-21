@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -52,32 +53,47 @@ public class MyCartFragment extends Fragment {
 
         if(DBqueries.cartlist.size()==0){
             DBqueries.cartlist.clear();
-            DBqueries.loadCartList(getContext(),loadingDialogue,true,new TextView(getContext()));
+            DBqueries.loadCartList(getContext(),loadingDialogue,true,new TextView(getContext()),totalAmount);
 
         }else{
+            if(DBqueries.cartItemModelList.get(DBqueries.cartItemModelList.size()-1).getTYPE()==CartItemModel.TOTAL_AMOUNT){
+                LinearLayout parent=(LinearLayout) totalAmount.getParent().getParent();
+                parent.setVisibility(View.VISIBLE);
+            }
             loadingDialogue.dismiss();
         }
-
         cartItemRecyclerView=view.findViewById(R.id.cart_item_recyclerView);
         continueButton=view.findViewById(R.id.cart_continue_btn);
-
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         cartItemRecyclerView.setLayoutManager(linearLayoutManager);
 
         List<CartItemModel> cartItemModelList=new ArrayList<>();
-        //cartItemModelList.add(new CartItemModel(0,R.drawable.im3,"Raya kemis new",2,"Br. 49999/-","Br. 49999/-",1,0,1));
-
         CartAdapter cartAdapter=new CartAdapter(DBqueries.cartItemModelList,totalAmount,true);
         cartAdapter.notifyDataSetChanged();
 
         continueButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        DeliveryActivity.cartItemModelList=new ArrayList<>();
+                        for(int x=0;x<DBqueries.cartItemModelList.size();x++){
+                            CartItemModel cartItemModel=DBqueries.cartItemModelList.get(x);
+                            if(cartItemModel.isIn_Stock()){
+                                DeliveryActivity.cartItemModelList.add(cartItemModel);
+                            }
+                        }
+                        DeliveryActivity.cartItemModelList.add(new CartItemModel(CartItemModel.TOTAL_AMOUNT));
+
                         loadingDialogue.show();
+                        if(DBqueries.addressModelList.size()==0){
                         DBqueries.loadAddress(getContext(),loadingDialogue);
+                        }else {
+                            loadingDialogue.dismiss();
+                            Intent dvIntent = new Intent(getContext(), DeliveryActivity.class);
+                            startActivity(dvIntent);
+                        }
                     }
-                });
+                    });
 
 
         return view;
