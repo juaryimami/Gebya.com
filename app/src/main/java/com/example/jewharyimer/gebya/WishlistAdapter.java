@@ -1,6 +1,7 @@
 package com.example.jewharyimer.gebya;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,7 +48,8 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
         String productprices=wishlistModelList.get(position).getProductPrice();
         String cutedprices=wishlistModelList.get(position).getCuttedPrice();
         boolean paymentmt=wishlistModelList.get(position).isCOD();
-      viewHolder.setData(productId,res,title,coupeno,ratting,totalratting,productprices,cutedprices,paymentmt,position);
+        boolean inStock=wishlistModelList.get(position).isInStock();
+      viewHolder.setData(productId,res,title,coupeno,ratting,totalratting,productprices,cutedprices,paymentmt,position,inStock);
         if(lasrPosition<position){
             Animation animation=AnimationUtils.loadAnimation(viewHolder.itemView.getContext(),R.anim.fade_in);
             viewHolder.itemView.setAnimation(animation);
@@ -88,11 +91,11 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
 
         }
         private void setData(final String productId, String resource, String title, long freeCoupenNo, String averageRate
-                , long totalratingNo, String price, String cuttedpriceValue, boolean payMethod, final int index){
+                , long totalratingNo, String price, String cuttedpriceValue, boolean payMethod, final int index,boolean inStock){
 
             Glide.with(itemView.getContext()).load(resource).apply(new RequestOptions().placeholder(R.drawable.place_holder)).into(productImage);
             productTitle.setText(title);
-            if(freeCoupenNo!=0){
+            if(freeCoupenNo!=0&& inStock){
                 if(freeCoupenNo==1){
                     coupenIcon.setVisibility(View.VISIBLE);
                     freeCoupen.setVisibility(View.VISIBLE);
@@ -104,15 +107,34 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
                 coupenIcon.setVisibility(View.INVISIBLE);
                 freeCoupen.setVisibility(View.INVISIBLE);
             }
-            rating.setText(averageRate);
-            totalrating.setText("("+totalratingNo+") Ratings");
-            productprice.setText("Br."+price+"/-");
-            cuttedPrice.setText("Br."+cuttedpriceValue+"/-");
-            if(payMethod){
-                paymentMethod.setVisibility(View.VISIBLE);
+            LinearLayout linearLayout= (LinearLayout) rating.getParent();
+            if(inStock)
+            {
+                rating.setVisibility(View.VISIBLE);
+                totalrating.setVisibility(View.VISIBLE);
+                productprice.setTextColor(Color.parseColor("#000000"));
+                cuttedPrice.setVisibility(View.VISIBLE);
+                linearLayout.setVisibility(View.INVISIBLE);
+
+                rating.setText(averageRate);
+                totalrating.setText("("+totalratingNo+") Ratings");
+                productprice.setText("Br."+price+"/-");
+                cuttedPrice.setText("Br."+cuttedpriceValue+"/-");
+                if(payMethod){
+                    paymentMethod.setVisibility(View.VISIBLE);
+                }else {
+                    paymentMethod.setVisibility(View.INVISIBLE);
+                }
             }else {
+                linearLayout.setVisibility(View.INVISIBLE);
+                rating.setVisibility(View.INVISIBLE);
+                totalrating.setVisibility(View.INVISIBLE);
+                productprice.setText("Out of Stock");
+                productprice.setTextColor(itemView.getContext().getResources().getColor(R.color.colorPrimary));
+                cuttedPrice.setVisibility(View.INVISIBLE);
                 paymentMethod.setVisibility(View.INVISIBLE);
             }
+
            // paymentMethod.setText(payMethod);
 
             if(wishlist){

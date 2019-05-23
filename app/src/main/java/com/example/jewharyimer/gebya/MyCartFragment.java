@@ -51,17 +51,6 @@ public class MyCartFragment extends Fragment {
 
         ///////////// dialogue
 
-        if(DBqueries.cartlist.size()==0){
-            DBqueries.cartlist.clear();
-            DBqueries.loadCartList(getContext(),loadingDialogue,true,new TextView(getContext()),totalAmount);
-
-        }else{
-            if(DBqueries.cartItemModelList.get(DBqueries.cartItemModelList.size()-1).getTYPE()==CartItemModel.TOTAL_AMOUNT){
-                LinearLayout parent=(LinearLayout) totalAmount.getParent().getParent();
-                parent.setVisibility(View.VISIBLE);
-            }
-            loadingDialogue.dismiss();
-        }
         cartItemRecyclerView=view.findViewById(R.id.cart_item_recyclerView);
         continueButton=view.findViewById(R.id.cart_continue_btn);
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
@@ -75,6 +64,7 @@ public class MyCartFragment extends Fragment {
         continueButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        DeliveryActivity.fromCart=true;
                         DeliveryActivity.cartItemModelList=new ArrayList<>();
                         for(int x=0;x<DBqueries.cartItemModelList.size();x++){
                             CartItemModel cartItemModel=DBqueries.cartItemModelList.get(x);
@@ -99,4 +89,20 @@ public class MyCartFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(DBqueries.cartlist.size()==0){
+            DBqueries.cartlist.clear();
+            DBqueries.loadCartList(getContext(),loadingDialogue,true,new TextView(getContext()),totalAmount);
+
+        }else{
+            if(DBqueries.cartItemModelList.get(DBqueries.cartItemModelList.size()-1).getTYPE()==CartItemModel.TOTAL_AMOUNT){
+                LinearLayout parent=(LinearLayout) totalAmount.getParent().getParent();
+                parent.setVisibility(View.VISIBLE);
+            }
+            loadingDialogue.dismiss();
+        }
+
+    }
 }

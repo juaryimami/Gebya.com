@@ -37,7 +37,7 @@
     <ImageButton
         android:id="@+id/code_button"
         android:layout_width="110dp"
-        android:layout_height="111dp"
+        android:layout_height="33dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -52,7 +52,7 @@
     <ImageButton
         android:id="@+id/payment"
         android:layout_width="110dp"
-        android:layout_height="111dp"
+        android:layout_height="47dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -88,7 +88,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
-        android:text="YeNaPay"
+        android:text="YeNePay"
         android:textColor="#000000"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"

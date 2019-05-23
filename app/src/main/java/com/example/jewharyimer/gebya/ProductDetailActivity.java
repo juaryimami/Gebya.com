@@ -401,7 +401,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                                                         ,(long)documentSnapshot.get("total_ratings")
                                                         ,documentSnapshot.get("product_price").toString()
                                                         ,documentSnapshot.get("cutted_price").toString()
-                                                        ,(boolean)documentSnapshot.get("COD") ));
+                                                        ,(boolean)documentSnapshot.get("COD")
+                                                ,(boolean)documentSnapshot.get("in_stock")));
 
                                             }
 
@@ -583,8 +584,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                 if(currentUser==null){
                     signinDialogue.show();
                 }else {
+                    DeliveryActivity.fromCart=false;
                     loadingDialogue.show();
-                    productDetailActivity= com.example.jewharyimer.gebya.ProductDetailActivity.this;
+                    productDetailActivity= ProductDetailActivity.this;
                     DeliveryActivity.cartItemModelList=new ArrayList<>();
                     DeliveryActivity.cartItemModelList.add(new CartItemModel(CartItemModel.CART_ITEM,productID,
                             documentSnapshot.get("product_image_1").toString()

@@ -116,7 +116,7 @@ public class DBqueries {
                                         ,documentSnapshots.get("product_price_"+x).toString()
                                         ,documentSnapshots.get("cutted_price_"+x).toString()
                                         ,(boolean)documentSnapshots.get("COD_"+x)
-
+                                        ,(boolean)documentSnapshots.get("in_stock_"+x)
                                 ));
                             }
 
@@ -197,6 +197,7 @@ public class DBqueries {
                                                     , task.getResult().get("product_price").toString()
                                                     , task.getResult().get("cutted_price").toString()
                                                     , (boolean) task.getResult().get("COD")
+                                                    ,(boolean)task.getResult().get("in_stock")
 
                                             ));
                                             WishlistFragment.wishlistAdapter.notifyDataSetChanged();
@@ -364,6 +365,10 @@ public class DBqueries {
         wishlistModelList.clear();
         cartlist.clear();
         cartItemModelList.clear();
+        myRatedIds.clear();
+        myRatedIds.clear();
+        addressModelList.clear();
+
     }
     public static void removedFromCartfinal(final int index, final Context context, final TextView cartTotalAmount){
         final String removedProductID=cartlist.get(index);
@@ -416,7 +421,8 @@ public class DBqueries {
                        addressModelList.add(new AddressModel(task.getResult().get("fullname_"+x).toString(),
                                task.getResult().get("address_"+x).toString(),
                                task.getResult().get("pincode_"+x).toString(),
-                               (boolean)task.getResult().get("selected_"+x)));
+                               (boolean)task.getResult().get("selected_"+x)
+                       ,task.getResult().get("mobile_no_"+x).toString()));
                        if((boolean)task.getResult().get("selected_"+x)){
                            selectedAddress=x-1;
                        }

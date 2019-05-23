@@ -112,10 +112,11 @@ public class AddAddressActivity extends AppCompatActivity {
                                         Map<String,Object> addresmap=new HashMap<>();
                                         addresmap.put("list_size",(long)DBqueries.addressModelList.size()+1);
                                         if(TextUtils.isEmpty(alternateMobileNo.getText())) {
-                                            addresmap.put("fullname_" + String.valueOf((long) DBqueries.addressModelList.size() + 1), name.getText().toString() + " - " + mobileNo.getText().toString());
+                                            addresmap.put("mobile_no_" + String.valueOf((long) DBqueries.addressModelList.size() + 1), mobileNo.getText().toString());
                                         }else {
-                                            addresmap.put("fullname_" + String.valueOf((long) DBqueries.addressModelList.size() + 1), name.getText().toString() + " - " + mobileNo.getText().toString()+" or "+alternateMobileNo.getText().toString());
+                                            addresmap.put("mobile_no_" + String.valueOf((long) DBqueries.addressModelList.size() + 1),mobileNo.getText().toString()+" or "+alternateMobileNo.getText().toString());
                                         }
+                                        addresmap.put("fullname_" + String.valueOf((long) DBqueries.addressModelList.size() + 1), name.getText().toString());
                                         addresmap.put("address_"+String.valueOf((long)DBqueries.addressModelList.size()+1),fullAddress);
                                         addresmap.put("pincode_"+String.valueOf((long)DBqueries.addressModelList.size()+1),pincode.getText().toString());
                                         addresmap.put("selected_"+String.valueOf((long)DBqueries.addressModelList.size()+1),true);
@@ -135,9 +136,9 @@ public class AddAddressActivity extends AppCompatActivity {
                                                         DBqueries.addressModelList.get(DBqueries.selectedAddress).setSelected(false);
                                                     }
                                                     if(TextUtils.isEmpty(alternateMobileNo.getText())) {
-                                                        DBqueries.addressModelList.add(new AddressModel(name.getText().toString() + " - " + mobileNo.getText().toString(), fullAddress, pincode.getText().toString(), true));
+                                                        DBqueries.addressModelList.add(new AddressModel(name.getText().toString() , fullAddress, pincode.getText().toString(), true, mobileNo.getText().toString()));
                                                     }else {
-                                                        DBqueries.addressModelList.add(new AddressModel(name.getText().toString() + " - " + mobileNo.getText().toString()+" or "+alternateMobileNo.getText().toString(), fullAddress, pincode.getText().toString(), true));
+                                                        DBqueries.addressModelList.add(new AddressModel(name.getText().toString(), fullAddress, pincode.getText().toString(), true, mobileNo.getText().toString()));
                                                     }
                                                     if(getIntent().getStringExtra("INTENT").equals("deliveryIntent")) {
                                                         Intent intent = new Intent(AddAddressActivity.this, DeliveryActivity.class);
