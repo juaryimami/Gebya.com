@@ -30,11 +30,13 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:nestedScrollingEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:nestedScrollingEnabled="true"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout5">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout5"
+        app:layout_constraintVertical_bias="0.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,40 +56,43 @@
                 android:id="@+id/city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:textColor="@color/colorPrimary"
+                android:ems="10"
+                android:hint="City*"
                 android:inputType="textPersonName"
-                android:hint="City*" />
+                android:textColor="@color/colorPrimary" />
+
             <EditText
                 android:id="@+id/locality_area_sttreet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:lines="3"
-                android:gravity="start"
-                android:isScrollContainer="true"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/colorPrimary"
+                android:layout_marginEnd="16dp"
+                android:ems="10"
+                android:gravity="start"
+                android:hint="Locality,Area, Street*"
                 android:inputType="textMultiLine"
-                android:hint="Locality,Area, Street*" />
+                android:isScrollContainer="true"
+                android:lines="3"
+                android:textColor="@color/colorPrimary" />
+
             <EditText
                 android:id="@+id/building_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:layout_marginTop="8dp"
-                android:lines="3"
-                android:isScrollContainer="true"
-                android:gravity="start"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:textColor="@color/colorPrimary"
+                android:ems="10"
+                android:gravity="start"
+                android:hint="Flat no.,building name*"
                 android:inputType="textMultiLine"
-                android:hint="Flat no.,building name*" />
+                android:isScrollContainer="true"
+                android:lines="3"
+                android:textColor="@color/colorPrimary" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -99,8 +104,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginEnd="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:hint="pincode"
                     android:inputType="number"
@@ -113,10 +118,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
-                    android:background="@drawable/border_background"
-                    android:backgroundTint="@color/recyclerViewBackground"
                     android:layout_weight="1"
-                    />
+                    android:background="@drawable/border_background"
+                    android:backgroundTint="@color/recyclerViewBackground" />
 
 
             </LinearLayout>
@@ -126,8 +130,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:hint="Land Mark (Optional)"
                 android:inputType="textPersonName"
@@ -147,9 +151,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
-                android:layout_marginTop="8dp"
                 android:hint="Name*"
                 android:inputType="textPersonName"
                 android:textColor="@color/colorPrimary" />
@@ -159,10 +163,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:hint="Mobile No"
-                android:layout_marginTop="8dp"
                 android:inputType="number"
                 android:textColor="@color/colorPrimary" />
 
@@ -171,8 +175,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:hint="Alternate Mobile No (optional)"
                 android:inputType="number"

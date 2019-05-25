@@ -21,9 +21,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(setSignupFragment){
             setSignupFragment=false;
-            setDefaultFragment(new SignupFragment());
-        }else {
             setDefaultFragment(new SigninFragment());
+        }else {
+            setDefaultFragment(new SignupFragment());
         }
     }
 

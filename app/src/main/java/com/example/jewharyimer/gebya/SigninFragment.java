@@ -58,7 +58,7 @@ public class SigninFragment extends Fragment {
                 dontHaveAccount=view.findViewById(R.id.no_account);
                 parentFrameLayout=getActivity().findViewById(R.id.register_framlayout);
 
-                email=view.findViewById(R.id.signup_email);
+                email=view.findViewById(R.id.signin_email);
                 password=view.findViewById(R.id.signin_name);
 
                 closebtn=view.findViewById(R.id.signin_close);
