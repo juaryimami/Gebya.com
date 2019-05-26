@@ -55,7 +55,8 @@ public class DBqueries {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             for (QueryDocumentSnapshot documentSnapshots : task.getResult()){
-                                category_modelList.add(new Category_Model(documentSnapshots.get("index").toString(),documentSnapshots.get("categoryName").toString()));
+                                category_modelList.add(new Category_Model(documentSnapshots
+                                        .get("index").toString(),documentSnapshots.get("categoryName").toString()));
                             }
                             Category_Adapter category_adapter=new Category_Adapter(category_modelList);
                             categoryRecyclerview.setAdapter(category_adapter );
@@ -77,73 +78,72 @@ public class DBqueries {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                 if(task.isSuccessful()){
-                    for (QueryDocumentSnapshot documentSnapshots : task.getResult()){
-                        if((long) documentSnapshots.get("view_type")==0){
+                    for (QueryDocumentSnapshot documentSnapshots : task.getResult()) {
+                        if ((long) documentSnapshots.get("view_type") == 0) {
 
-                            List<SliderModel> sliderModelList=new ArrayList<>();
+                            List<SliderModel> sliderModelList = new ArrayList<>();
 
-                            long no_of_banners= (long) documentSnapshots.get("no_of_banners");
-                            for(long x=1;x<no_of_banners+1;x++){
-                                sliderModelList.add(new SliderModel(documentSnapshots.get("banner_"+x).toString()
-                                        ,documentSnapshots.get("banner_"+x + "_background").toString()));
+                            long no_of_banners = (long) documentSnapshots.get("no_of_banners");
+                            for (long x = 1; x < no_of_banners + 1; x++) {
+                                sliderModelList.add(new SliderModel(documentSnapshots.get("banner_" + x).toString()
+                                        , documentSnapshots.get("banner_" + x + "_background").toString()));
                             }
-                            lists.get(index).add(new HomePageModel(0,sliderModelList));
+                            lists.get(index).add(new HomePageModel(0, sliderModelList));
 
-                        }else if((long) documentSnapshots.get("view_type")==1){
-                            lists.get(index).add(new HomePageModel(1,documentSnapshots.get("strip_add_banner").toString()
-                                    ,documentSnapshots.get("background").toString()));
+                        } else if ((long) documentSnapshots.get("view_type") == 1) {
+                            lists.get(index).add(new HomePageModel(1, documentSnapshots.get("strip_add_banner").toString()
+                                    , documentSnapshots.get("background").toString()));
 
-                        }
-                        else if((long) documentSnapshots.get("view_type")==2){
-                            List<WishlistModel> viewAllProductList=new ArrayList<>();
-                            List<HorizontalProductScrollModel> horizontalProductScrollModelList=new ArrayList<>();
-                            long no_of_products= (long) documentSnapshots.get("no_of_products");
-                            for(long x=1;x<no_of_products+1;x++){
-                                horizontalProductScrollModelList.add(new HorizontalProductScrollModel(documentSnapshots.get("product_ID_"+x).toString()
-                                        ,documentSnapshots.get("product_image"+x).toString()
-                                        ,documentSnapshots.get("product_title"+x).toString()
-                                        ,documentSnapshots.get("product_subtitle"+x).toString()
-                                        ,documentSnapshots.get("product_price"+x).toString()));
+                        } else if ((long) documentSnapshots.get("view_type") == 2) {
+                            List<WishlistModel> viewAllProductList = new ArrayList<>();
+                            List<HorizontalProductScrollModel> horizontalProductScrollModelList = new ArrayList<>();
+                            long no_of_products = (long) documentSnapshots.get("no_of_products");
+                            for (long x = 1; x < no_of_products + 1; x++) {
+                                horizontalProductScrollModelList.add(new HorizontalProductScrollModel(documentSnapshots.get("product_ID_" + x).toString()
+                                        , documentSnapshots.get("product_image_" + x).toString()
+                                        , documentSnapshots.get("product_title_" + x).toString()
+                                        , documentSnapshots.get("product_subtitle_" + x).toString()
+                                        , documentSnapshots.get("product_price_" + x).toString()));
 
 
-                                viewAllProductList.add(new WishlistModel(documentSnapshots.get("product_ID_"+x).toString()
-                                        ,documentSnapshots.get("product_image_"+x).toString()
+                                viewAllProductList.add(new WishlistModel(documentSnapshots.get("product_ID_" + x).toString()
+                                        , documentSnapshots.get("product_image_" + x).toString()
 
-                                        ,documentSnapshots.get("product_full_title_"+x).toString()
-                                        ,(long)documentSnapshots.get("free_coupens_"+x)
-                                        ,documentSnapshots.get("average_rating_"+x).toString()
-                                        ,(long)documentSnapshots.get("total_ratings_"+x)
-                                        ,documentSnapshots.get("product_price_"+x).toString()
-                                        ,documentSnapshots.get("cutted_price_"+x).toString()
-                                        ,(boolean)documentSnapshots.get("COD_"+x)
-                                        ,(boolean)documentSnapshots.get("in_stock_"+x)
+                                        , documentSnapshots.get("product_full_title_" + x).toString()
+                                        , (long) documentSnapshots.get("free_coupens_" + x)
+                                        , documentSnapshots.get("average_rating_" + x).toString()
+                                        , (long) documentSnapshots.get("total_ratings_" + x)
+                                        , documentSnapshots.get("product_price_" + x).toString()
+                                        , documentSnapshots.get("cutted_price_" + x).toString()
+                                        , (boolean) documentSnapshots.get("COD_" + x)
+                                        , (boolean) documentSnapshots.get("in_stock_" + x)
                                 ));
                             }
 
 
                             lists.get(index).add(new HomePageModel(2
-                                    ,documentSnapshots.get("layout_title").toString()
-                                    ,documentSnapshots.get("layout_background").toString()
-                                    ,horizontalProductScrollModelList,viewAllProductList));
+                                    , documentSnapshots.get("layout_title").toString()
+                                    , documentSnapshots.get("layout_background").toString()
+                                    , horizontalProductScrollModelList, viewAllProductList));
+                        } else if ((long) documentSnapshots.get("view_type") == 3) {
+
+
+                            List<HorizontalProductScrollModel> GridlayoutlModelList = new ArrayList<>();
+                            long no_of_products = (long) documentSnapshots.get("no_of_products");
+                            for (long x = 1; x < no_of_products + 1; x++) {
+                                GridlayoutlModelList.add(new HorizontalProductScrollModel(documentSnapshots.get("product_ID_" + x).toString()
+                                        , documentSnapshots.get("product_image_" + x).toString()
+                                        , documentSnapshots.get("product_title_" + x).toString()
+                                        , documentSnapshots.get("product_subtitle_" + x).toString()
+                                        , documentSnapshots.get("product_price_" + x).toString()));
+
+                            }
+                            lists.get(index).add(new HomePageModel(3
+                                    , documentSnapshots.get("layout_title").toString()
+                                    , documentSnapshots.get("layout_background").toString()
+                                    , GridlayoutlModelList));
+
                         }
-                        else if((long) documentSnapshots.get("view_type")==3){}
-
-
-                        List<HorizontalProductScrollModel> GridlayoutlModelList=new ArrayList<>();
-                        long no_of_products= (long) documentSnapshots.get("no_of_products");
-                        for(long x=1;x<no_of_products+1;x++){
-                            GridlayoutlModelList.add(new HorizontalProductScrollModel(documentSnapshots.get("product_ID_"+x).toString()
-                                    ,documentSnapshots.get("product_image"+x).toString()
-                                    ,documentSnapshots.get("product_title"+x).toString()
-                                    ,documentSnapshots.get("product_subtitle"+x).toString()
-                                    ,documentSnapshots.get("product_price"+x).toString()));
-
-                        }
-                        lists.get(index).add(new HomePageModel(3
-                                ,documentSnapshots.get("layout_title").toString()
-                                ,documentSnapshots.get("layout_background").toString()
-                                ,GridlayoutlModelList));
-
                     }
                     HomePageAdapter homePageAdapter=new HomePageAdapter(lists.get(index));
                     homePageREcyclerView.setAdapter(homePageAdapter);
